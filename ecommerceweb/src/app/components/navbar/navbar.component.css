@@ -1,0 +1,200 @@
+/* Stili generali */
+.topNavbar {
+  position: fixed; /* Fissa la navbar nella posizione specificata, in questo caso in alto */
+  top: 0; /* Posiziona la navbar in alto */
+  left: 0; /* Allinea la navbar a sinistra */
+  width: 100%; /* Rende la navbar larga quanto la finestra */
+  min-width: 410px;
+  z-index: 1000; /* Assicura che la navbar sia sempre sopra gli altri elementi */
+  background-color: var(--sfondoNavbarFooter); /* Colore di sfondo della navbar */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra per evidenziarla */
+}
+
+.navbar-container{
+  padding-bottom: 64px; /* Altezza approssimativa della navbar */
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* Logo e brand container */
+.logo-brand {
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    gap: 8px; /* Distanza minima tra logo e testo */
+}
+
+/* Logo image */
+.logo-img {
+    height: 48px;
+    width: auto;
+    display: block;
+    transition: all 0.3s ease; /* Transizione fluida */
+    cursor: pointer; /* Cambia cursore per indicare che è cliccabile */
+}
+
+/* Logo link */
+.logo-link {
+    display: block;
+    transition: all 0.3s ease;
+    border-radius: 4px; /* Angoli leggermente arrotondati per l'effetto hover */
+}
+
+/* Effetto hover sul logo */
+.logo-link:hover .logo-img {
+    transform: scale(1.13); /* Ingrandimento del 13% */
+    filter: brightness(1.1); /* Leggero aumento di luminosità */
+}
+
+/* Effetto hover sull'intero link */
+.logo-link:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Sfondo leggero al hover */
+}
+
+/* Header principale */
+.main-border {
+    border-bottom: 2px solid #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Nome negozio (a destra del logo) */
+.main-border div:first-child a {
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+/* Link di navigazione */
+.nav-links {
+    margin-right: 10px;
+}
+
+.nav-links a {
+    color: white !important;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.nav-links a:hover {
+    background-color: var(--navLinksHover);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.nav-links a.active {
+    background-color: var(--sfondoLinkNavbar);
+    color: white !important;
+    transform: scale(1.1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Nascondi su mobile, mostra su desktop */
+.desktop-only {
+  display: none;
+}
+
+/* Mostra su mobile, nascondi su desktop */
+.mobile-only {
+  display: block;
+}
+
+/* Desktop: mostra i link normali */
+@media (min-width: 635px) {
+  .desktop-only {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  /* Assicurati che il dropdown non appaia mai su desktop 
+  .dropdown-menu {
+    display: none !important;
+  }
+  */
+}
+
+/* Mobile: stili per il menu */
+.menu-toggle {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  color: white !important;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.menu-toggle:hover {
+  background-color: var(--navLinksHover); 
+  color: #fff;
+  transform: scale(1.1);
+}
+
+
+
+
+
+
+
+
+.dropdown-menu {
+  position: absolute;
+  top: 64px;
+  right: 20px;
+  background-color: var(--sfondoNavbarFooter);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+  z-index: 1001;
+  min-width: 200px;
+}
+
+.dropdown-menu.open {
+  display: flex;
+}
+
+.dropdown-menu a {
+  color: white !important;
+  padding: 12px 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+  border-radius: 0;
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--navLinksHover);
+}
+
+
+
+

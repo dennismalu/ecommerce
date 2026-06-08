@@ -1,0 +1,286 @@
+/* ================================
+   STILI GENERALI
+================================ */
+:host {
+  display: block;
+  background-color: #f8f8f8;
+  min-height: var(--minheight);
+}
+
+/* Contenitore principale */
+.container {
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.container-div {
+  min-width: 430px;
+}
+
+/* ================================
+   SEZIONE FILTRI
+================================ */
+.filters-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+}
+
+.filters-section form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filters-section input[nz-input] {
+  min-width: 250px;
+}
+
+.filters-section label[nz-checkbox] {
+  font-size: 14px;
+  margin-left: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Pulsanti nei filtri */
+.filters-section button[nz-button] {
+  transition: all 0.3s ease;
+}
+
+.filters-section button[nz-button]:hover {
+  transform: translateY(-1px);
+}
+
+/* Controlli select e input */
+.filter-control {
+  border-radius: 8px !important;
+}
+
+.filters-section nz-select {
+  width: 100%;
+}
+
+/* ================================
+   CARD PRODOTTO
+================================ */
+.child {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid #e8e8e8;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.child:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Immagine prodotto */
+.profile {
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  padding: 4px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.profile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Titolo prodotto */
+h2 {
+  color: var(--titoli);
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* Descrizione prodotto */
+p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+/* Separatori */
+hr {
+  border: none;
+  border-top: 1px solid #e8e8e8;
+  margin: 20px 0;
+}
+
+/* Informazioni prezzo, categoria e stato */
+h5 {
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  text-align: left;
+}
+
+h5 b {
+  font-weight: 600;
+}
+
+/* Specifici */
+.price {
+  color: var(--colorPriceValue);
+}
+
+.category {
+  color: var(--colorCategoryValue);
+}
+
+.status {
+  color: var(--colorStatusValue);
+  text-transform: capitalize;
+}
+
+/* ================================
+   GRIGLIA PRODOTTI
+================================ */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 24px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* ================================
+   MESSAGGIO "NESSUN PRODOTTO"
+================================ */
+.no-products {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 16px;
+}
+
+.no-products h3 {
+  color: var(--titoli);
+  margin-bottom: 16px;
+}
+
+/* ================================
+   LAYOUT RESPONSIVE
+================================ */
+nz-row {
+  align-items: flex-start;
+}
+
+nz-col {
+  padding: 0 8px;
+}
+
+.ant-col-16 {
+  padding-left: 13px; /* +5px rispetto al default */
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .child {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .profile {
+    max-width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    display: block;
+  }
+  
+  h2 {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 16px;
+  }
+  
+  p {
+    text-align: center;
+  }
+  
+  h5 {
+    text-align: center;
+  }
+  
+  .filters-section form {
+    flex-direction: column;
+  }
+
+  nz-col[nzSpan="8"] {
+    text-align: center;
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .child {
+    padding: 16px;
+  }
+  
+  .profile {
+    max-width: 120px;
+    height: 120px;
+  }
+  
+  h2 {
+    font-size: 18px;
+  }
+  
+  h5 {
+    font-size: 14px;
+  }
+  
+  p {
+    font-size: 13px;
+  }
+}
+
+/* ================================
+   ANIMAZIONI
+================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

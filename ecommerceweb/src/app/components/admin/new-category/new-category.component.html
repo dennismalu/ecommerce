@@ -1,0 +1,34 @@
+<div class="bg">
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" nzTip="Attendi..."> 
+        <div class="parent"> 
+            <div class="child"> 
+                <div nz-row class="titleDiv"> 
+                    <h2>Aggiungi Categoria</h2> 
+                </div> 
+                
+                <form nz-form [formGroup]="categoryForm"> 
+                    <div nz-row> 
+                        
+                        <div nz-col nzSpan="24"> 
+                            <nz-form-item> 
+                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="Inserisci il nome!"> 
+                                    <input nz-input placeholder="Nome" formControlName="name" /> 
+                                </nz-form-control> 
+                            </nz-form-item> 
+                        </div>
+                        
+                        <div nz-col nzSpan="24"> 
+                            <nz-form-item> 
+                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="Inserisci la descrizione!"> 
+                                    <textarea rows="1" nz-input placeholder="Descrizione" formControlName="description"></textarea> 
+                                </nz-form-control> 
+                            </nz-form-item>
+                        </div> 
+                    </div> 
+                    <button nz-button class="add-category-form-button add-category-form-margin" [nzType]="'primary'" (click)="newCategory()">Aggiungi</button> 
+                </form> 
+            </div> 
+        </div> 
+    </nz-spin> 
+</div>
+

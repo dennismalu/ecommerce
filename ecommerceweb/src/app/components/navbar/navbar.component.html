@@ -1,0 +1,84 @@
+<div class="navbar-container">
+ <nz-header class="main-border topNavbar" nz-row nzType="flex" *ngIf="isBrowser">
+  <!-- Logo e Nome del sito -->
+  <div class="logo-brand">
+    <div class="logo">
+      <a routerLink="/home" class="logo-link">
+        <img src="assets/images/logo.jpg" alt="Logo" class="logo-img">
+      </a>
+    </div>
+    <div class="nav-links">
+      <a nz-button nzType="link" routerLinkActive="active" routerLink="/home">SoundHub Arcavacata</a>
+    </div>
+  </div>
+
+
+
+
+  <!-- Versione DESKTOP: tutti i link visibili -->
+  <!-- links per utente che non ha effettuato l'accesso -->
+  <div class="nav-links desktop-only" *ngIf="!isUserLoggedIn && !isAdminLoggedIn">
+    <a nz-button nzType="link" routerLink="/login" routerLinkActive="active">Accedi</a>
+    <a nz-button nzType="link" routerLink="/register" routerLinkActive="active">Registrati</a>
+  </div>
+
+  <!-- links per admin -->
+  <div class="nav-links desktop-only" *ngIf="isAdminLoggedIn">
+    <a nz-button nzType="link" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+    <a nz-button nzType="link" (click)="logout()">Logout</a>
+    <button nz-button nzType="text" class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
+      Menu
+    </button>
+  </div>
+
+  <!-- links per utente semplice -->
+  <div class="nav-links desktop-only" *ngIf="isUserLoggedIn && !isAdminLoggedIn">
+    <a nz-button nzType="link" routerLink="/user/dashboard" routerLinkActive="active">Dashboard</a>
+    <a nz-button nzType="link" (click)="logout()">Logout</a>
+    <button nz-button nzType="text" class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
+      Menu
+    </button>
+  </div>
+
+
+
+
+
+  <!-- Versione MOBILE: solo pulsante Menu -->
+  <button nz-button nzType="text" class="menu-toggle mobile-only" (click)="toggleMenu(); $event.stopPropagation()">
+    Menu
+  </button>
+
+  <!-- Menu verticale per MOBILE -->
+  <div class="dropdown-menu" [class.open]="menuOpen">
+
+    <!-- links per utente che non ha effettuato l'accesso -->
+    <ng-container *ngIf="!isUserLoggedIn && !isAdminLoggedIn">
+      <a nz-button nzType="link" routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Accedi</a>
+      <a nz-button nzType="link" routerLink="/register" routerLinkActive="active" (click)="closeMenu()">Registrati</a>
+    </ng-container>
+
+    <!-- links per admin -->
+    <ng-container *ngIf="isAdminLoggedIn">
+      <a class="mobile-only" nz-button nzType="link" routerLink="/admin/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
+      <a nz-button nzType="link" routerLink="/admin/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
+      <a nz-button nzType="link" routerLink="/admin/new-category" routerLinkActive="active" (click)="closeMenu()">Aggiungi categoria</a>
+      <a nz-button nzType="link" routerLink="/admin/new-product" routerLinkActive="active" (click)="closeMenu()">Aggiungi prodotto</a>
+      <a nz-button nzType="link" routerLink="/admin/disable-products" routerLinkActive="active" (click)="closeMenu()">Prodotti disabilitati</a>
+      <a class="mobile-only" nz-button nzType="link" (click)="logoutAndClose()">Logout</a>
+    </ng-container>
+
+    <!-- links per utente semplice -->
+    <ng-container *ngIf="isUserLoggedIn && !isAdminLoggedIn">
+      <a class="mobile-only" nz-button nzType="link" routerLink="/user/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
+      <a nz-button nzType="link" routerLink="/user/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
+      <a class="mobile-only" nz-button nzType="link" (click)="logoutAndClose()">Logout</a>
+    </ng-container>
+
+  </div>
+ </nz-header>
+</div>
+
+
+
+

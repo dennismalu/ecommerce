@@ -1,0 +1,217 @@
+<div class="container container-div">
+
+  <!-- Filtri e ordinamento -->
+  <div class="filters-section container-div">
+
+    <!-- PRIMA RIGA -->
+    <nz-row nzGutter="16" nzJustify="center" nzAlign="middle" style="margin-bottom: 16px;">
+
+        <!-- Barra di ricerca con checkbox -->
+        <div nz-col nzSpan="30">
+            <form nz-form [formGroup]="searchForm" class="filter-control" style="text-align: center; gap: 10px;">
+                <input nz-input formControlName="name" 
+                    placeHolder="Inserisci il nome del prodotto"
+                    nzErrorTip="Inserisci il nome del prodotto!"  style="width: 75%;" />
+                <button nz-button nzType="primary" 
+                    (click)="searchProduct()">
+                    Cerca
+                </button>
+
+                <label nz-checkbox *ngIf="isAdminLoggedIn"
+                    formControlName="includeDisabled"
+                    (ngModelChange)="onNameOrFilterOrPageSizeChange()"
+                >
+                    Includi prodotti disabilitati
+                </label>
+            </form>
+        </div>
+
+    </nz-row>
+
+
+    <!-- SECONDA RIGA: 2 colonne per filtri -->
+    <nz-row nzGutter="16" nzJustify="center" nzAlign="middle" style="margin-bottom: 16px;">
+
+        <!-- Ordinamento -->
+        <div nz-col nzSpan="8">
+            <label nz-label>Ordina per:</label>
+            <nz-select 
+            class="filter-control"
+            nzPlaceHolder="Ordina prodotti" 
+            style="width: 100%" 
+            [(ngModel)]="selectedSort"
+            (ngModelChange)="onNameOrFilterOrPageSizeChange()">
+            <nz-option 
+                *ngFor="let option of sortOptions" 
+                [nzValue]="option.value" 
+                [nzLabel]="option.label">
+            </nz-option>
+            </nz-select>
+        </div>
+
+        <!-- Elementi per pagina -->
+        <div nz-col nzSpan="6">
+        <label nz-label>Elementi per pagina:</label>
+        <nz-select 
+            class="filter-control"
+            style="width: 100%" 
+            [(ngModel)]="pageSize"
+            (ngModelChange)="onNameOrFilterOrPageSizeChange()">
+
+            <nz-option [nzValue]="1" nzLabel="1"></nz-option>
+            <nz-option [nzValue]="2" nzLabel="2"></nz-option>
+            <nz-option [nzValue]="3" nzLabel="3"></nz-option>
+            
+            <nz-option [nzValue]="10" nzLabel="10"></nz-option>
+            <nz-option [nzValue]="20" nzLabel="20"></nz-option>
+            <nz-option [nzValue]="50" nzLabel="50"></nz-option>
+            <nz-option [nzValue]="100" nzLabel="100"></nz-option>
+        </nz-select>
+        </div>
+
+
+    
+    </nz-row>
+
+
+    <!-- TERZA RIGA: 2 colonne (Reset + Paginazione) -->  
+    <nz-row nzGutter="16" nzJustify="center" nzAlign="middle" style="gap: 10px;">
+    
+        <!-- Filtro per categoria -->
+        <div nz-col nzSpan="8">
+            <label nz-label>Categoria:</label>
+            <nz-select 
+            class="filter-control"
+            nzPlaceHolder="Seleziona categoria" 
+            style="width: 100%" 
+            [(ngModel)]="selectedCategory"
+            (ngModelChange)="onNameOrFilterOrPageSizeChange()">
+            <nz-option 
+                *ngFor="let category of categoryOptions" 
+                [nzValue]="category.value" 
+                [nzLabel]="category.label">
+            </nz-option>
+            </nz-select>
+        </div>
+
+        <!-- Reset filtri -->
+        <nz-col nzSpan="8">
+            <button 
+            class="filter-control"
+            nz-button 
+            nzType="default" 
+            nzSize="large"
+            style="width: 100%; margin-top: 17px;"
+            (click)="resetFilters()">
+            <i nz-icon nzType="reload"></i>
+            Reset Filtri
+            </button>
+        </nz-col>
+
+        <!-- Pulsanti di paginazione -->
+        <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="10" style="display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; padding: 0 8px; min-width: 435px;">
+            <button 
+                nz-button 
+                nzType="default" 
+                [disabled]="currentPage === 1"
+                (click)="goToPage(currentPage - 1)">
+                <i nz-icon nzType="left"></i> Precedente
+            </button>
+
+            <div style="text-align: center;">
+              <div style="font-weight: 500; white-space: nowrap;">
+                Pagina {{ currentPage }} di {{ totalPages }}
+              </div>
+              <div style="font-size: 14px; color: #666; margin-top: 4px; white-space: nowrap;">
+                Totale prodotti: {{ totalElements }}
+              </div>
+            </div>
+
+            <button 
+                nz-button 
+                nzType="default" 
+                [disabled]="currentPage === totalPages"
+                (click)="goToPage(currentPage + 1)">
+                Successiva <i nz-icon nzType="right"></i>
+            </button>
+        </nz-col>
+
+    </nz-row>
+  </div>
+
+
+
+
+
+
+  <!-- Messaggio quando non ci sono prodotti -->
+  <div *ngIf="searchDone && products.length === 0" class="no-products">
+    <h3 *ngIf="selectedCategory === -1">Nessun prodotto disponibile</h3>
+    <h3 *ngIf="selectedCategory !== -1">Nessun prodotto nella categoria selezionata</h3>
+    <p>Non ci sono prodotti che corrispondono al nome che hai cercato!</p>
+  </div>
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+  <!-- Griglia prodotti -->
+  <div class="product-grid container-div">
+    <div class="child" *ngFor="let product of products"> 
+
+      <div nz-row> 
+        <div nz-col nzSpan="8"> 
+          <img class="profile" [src]="product.image" alt="immagine_prodotto" />
+        </div> 
+        
+        <div nz-col nzSpan="16"> 
+          <h2> {{ product.name }} </h2> 
+          <!-- Se la descrizione è null mette di default una stringa vuota; 
+               riduco la descrizione ai soli primi 65 caratteri, se la
+               descrizione ha delle parole che sono state troncate aggiunge ... -->
+          <p>{{ (product.description || '').substring(0, 65) + (product.description?.length > 65 ? '...' : '') }}</p>
+          
+          <hr />  <!-- barra orizzontale -->
+
+          <h5> 
+            Prezzo: <b class="price">{{ product.price }}€</b> - 
+            Categoria: <b class="category">{{ product.categoryName }}</b> -
+            Stato: <b class="status" *ngIf="isAdminLoggedIn">{{ product.disabled ? 'disabilitato' : 'abilitato' }}</b>
+          </h5> 
+
+          <hr /> 
+
+           <!-- tasti "Modifica", "Disabilita" ed "Elimina" SOLO per admin -->
+          <div style="float: right" *ngIf="isAdminLoggedIn"> 
+            <button style="margin-left: 10px" nzSize="small" nz-button nzType="primary" routerLink="/admin/product/{{product.id}}"> 
+              Modifica 
+            </button> 
+
+            <button style="margin-left: 10px" nzSize="small" nz-button nzType="primary" (click)="disableProduct(product.id)"> 
+              Disabilita
+            </button> 
+
+            <!-- nzDanger: colore rosso -->
+            <button style="margin-left: 10px" nzSize="small" nz-button nzType="primary" nzDanger (click)="deleteProduct(product.id)"> 
+              Elimina 
+            </button> 
+          </div>
+
+        </div> 
+      </div> 
+    </div> 
+  </div>
+
+</div>
+

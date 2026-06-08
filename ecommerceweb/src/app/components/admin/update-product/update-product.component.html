@@ -1,0 +1,146 @@
+<div> 
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" nzTip="Attendi...">
+        <div class="parent"> 
+            <div class="child"> 
+                <div class="form-title"> 
+                    <h2>Modifica Prodotto</h2> 
+                </div> 
+                
+                <form nz-form [formGroup]="updateProductForm"> 
+                    <div nz-row> 
+
+                        <div nz-col [nzMd]="24" [nzSm]="24" [nzXs]="24"> 
+                            <div class="upload-image"> 
+                                
+                                <!-- Anteprima immagine -->
+                                <div class="image-preview" *ngIf="!selectedImageFile && !imagePreview">
+                                      <!-- div vuoto solo per far comparire la scritta
+                                           "Nessuna immagine selezionata" -->
+                                </div>
+                                
+
+                                <div class="image-preview" *ngIf="imagePreview">
+                                    <img 
+                                        [src]="imagePreview" 
+                                        alt="Anteprima prodotto"
+                                        (error)="onImageError($event)"
+                                    />
+
+                                    <!-- nome della nuova immagine selezionata (SOLO SE è stata selezionata una nuova immagine) -->
+                                    <div class="image-name" *ngIf="selectedImageFile">
+                                        {{ selectedImageFile.name }}
+                                    </div>
+
+                                    <!-- immagine presa dal backend (SOLO SE non è stata selezionata una 
+                                         nuova immagine e nel DTO ce n'è una inviata dal backend ) -->
+                                    <div class="image-name" *ngIf="!selectedImageFile && product.image">
+                                        Immagine originaria (dal database)
+                                    </div>
+
+                                </div>
+
+                                <!-- Bottone per rimuovere l'immagine -->
+                                <button 
+                                    nz-button 
+                                    nzType="default" 
+                                    nzDanger
+                                    class="remove-image-button"
+                                    (click)="removeImage()"
+                                    *ngIf="imagePreview"
+                                >
+                                    <i nz-icon nzType="delete"></i>
+                                    Rimuovi Immagine
+                                </button>
+                                
+                                <!-- Bottone per selezionare un'immagine -->
+                                <label class="custom-file-upload">
+                                    Seleziona immagine
+                                    <input 
+                                        type="file" 
+                                        nz-button
+                                        nzType="primary" 
+                                        accept="image/x-png, image/gif, image/jpeg"
+                                        (change)="onFileSelected($event)" 
+                                    />
+                                </label>
+
+                            </div> 
+                        </div> 
+                        
+                        <div nz-col nzSpan="24"> 
+                            <nz-form-item> 
+                                <nz-form-control 
+                                    nzHasFeedback [nzXs]="24" 
+                                    nzErrorTip="Seleziona una categoria!" > 
+                                    <nz-select 
+                                        nzShowSearch
+                                        nzAllowClear
+                                        nzPlaceHolder="Categoria" 
+                                        formControlName="categoryId">
+                                        <nz-option
+                                            *ngFor="let category of categories"
+                                            nzLabel="{{category.name}}"
+                                            nzValue="{{category.id}}"
+                                        ></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col nzSpan="24"> 
+                            <nz-form-item> 
+                                <nz-form-control nzHasFeedback [nzXs]="24" [nzErrorTip]="errorName" >
+                                    <input nz-input placeholder="Nome" formControlName="name"/> 
+                                    <ng-template #errorName let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Inserisci il nome del prodotto!
+                                        </ng-container>
+                                        <ng-container *ngIf="control.hasError('maxlength')">
+                                            Inserisci un nome formato da al più 60 caratteri!
+                                        </ng-container >
+                                    </ng-template>
+                                </nz-form-control> 
+                            </nz-form-item> 
+                        </div>
+
+                        <div nz-col nzSpan="24"> 
+                            <nz-form-item> 
+                                <nz-form-control nzHasFeedback [nzXs]="24" [nzErrorTip]="errorPrice" >
+                                    <input nz-input placeholder="Prezzo" formControlName="price"/> 
+                                        <ng-template #errorPrice let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                                Inserisci il prezzo!
+                                            </ng-container>
+                                            <ng-container *ngIf="control.hasError('pattern')">
+                                                Inserisci un valore numerico corretto!
+                                            </ng-container >
+                                        </ng-template>
+                                </nz-form-control> 
+                            </nz-form-item> 
+                        </div>
+
+                        <div nz-col nzSpan="24"> 
+                            <nz-form-item> 
+                                <nz-form-control 
+                                    nzHasFeedback 
+                                    [nzXs]="24" 
+                                    nzErrorTip="Inserisci la descrizione!" >
+                                    <textarea rows="1" nz-input placeholder="Descrizione"
+                                    formControlName="description"></textarea> 
+                                </nz-form-control> 
+                            </nz-form-item> 
+                        </div>
+                    
+                    </div>
+                    
+                    <button nz-button class="add-button" [nzType]="'primary'"
+                        (click)="updateProduct()">
+                        Aggiorna
+                    </button> 
+                </form> 
+            </div> 
+        </div> 
+    </nz-spin> 
+</div>
+
+                                

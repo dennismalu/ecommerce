@@ -1,0 +1,83 @@
+<div class="bg">
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" nzTip="Attendi...">
+        <div class="parent">
+            <div class="child">
+                <div nz-row class="titleDiv">
+                    <div nz-col nzSpan="24">
+                        <h1>Registrati</h1>
+                    </div>
+                </div>
+
+
+                <!--  Template-driven forms: la logica del form è definita direttamente nel template HTML;
+                      Reactive forms: la logica del form è definita nel codice TypeScript, come in questo caso  -->
+                <form nz-form [formGroup]="validateForm">
+                    <nz-form-item> <!-- nzHasFeedback per mostrare icone di stato (verde/rosso) -->
+                        <nz-form-control nzHasFeedback nzErrorTip="Inserisci un'indirizzo e-mail valido!">
+                            <input nz-input placeholder="E-mail" formControlName="email" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item> <!-- messaggi di errore specifici tramite il template #errorPass -->
+                        <nz-form-control nzHasFeedback [nzErrorTip]="errorPass">
+                            <input nz-input placeholder="Password" type="password" formControlName="password" />
+                            <ng-template #errorPass let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Inserisci la password!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">
+                                    La password deve essere formata almeno da 8 caratteri e deve contenere almeno una lettera minuscola, una lettera maiuscola, un numero e un carattere speciale
+                                </ng-container >
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item> <!-- messaggi di errore specifici tramite il template #errorConfirmPassword -->
+                        <nz-form-control 
+                            [nzHasFeedback]="validateForm.get('password')?.valid" 
+                            [nzErrorTip]="errorConfirmPassword"
+                        > <!-- nzHasFeedback nasconde il feedback visivo (pallino verde/rosso) sul campo "Conferma password" quando il campo 
+                               "password" non è valido; il feedback visivo viene abilitato solo se il campo "password" è valido (valid) -->
+                            <input nz-input type="password" placeholder="Conferma Password" formControlName="confirmPassword" />
+                            <ng-template #errorConfirmPassword let-control>
+                                <ng-container *ngIf="control.hasError ('required')">
+                                    Conferma la password!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('confirm')">
+                                    Le due password non coincidono!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item> <!-- messaggi di errore specifici tramite il template #errorUser -->
+                        <nz-form-control nzHasFeedback [nzErrorTip]="errorUser">
+                            <input nz-input placeholder="Username" formControlName="name" />
+                            <ng-template #errorUser let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Inserisci il tuo username!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+
+                    <div class="button-group">
+                        <button nz-button class="register-form-button" [nzType]="'primary'" (click)="register()">
+                            <!-- [disabled]="validateForm.invalid" impedisce all'utente di premere il pulsante finché tutti i campi non sono validi -->
+                            Registrati
+                        </button>
+                        <div class="divider">
+                            <span class="divider-text">oppure</span>
+                        </div>
+                        <button nz-button class="register-now-button" [nzType]="'default'" routerLink="/login">
+                            Accedi Ora
+                        </button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </nz-spin>
+</div>

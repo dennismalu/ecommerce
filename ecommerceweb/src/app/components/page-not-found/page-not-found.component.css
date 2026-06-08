@@ -1,0 +1,70 @@
+/* Stile generale del contenitore */
+.not-found-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  background-color: #f8f9fa; /* Colore di sfondo chiaro */
+  text-align: center;
+}
+
+/* Contenuto principale */
+.not-found-content {
+  max-width: calc(100% - 100px); /* Larghezza massima con margine laterale garantito */
+  padding: 0 50px; /* Margine laterale minimo di 50px */
+  box-sizing: border-box; /* Include il padding nel calcolo della larghezza */
+  margin: 0 auto; /* Centra il contenuto orizzontalmente */
+  padding: 20px;
+}
+
+/* Immagine di errore */
+.not-found-image {
+  width: 100%; /* L'immagine occupa tutta la larghezza disponibile */
+  max-width: 700px; /* Dimensione massima aumentata */
+  height: auto; /* Mantieni le proporzioni */
+  margin: 0 auto 30px; /* Centra l'immagine e aggiunge spazio sotto */
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Titolo principale (codice di errore) */
+.not-found-title {
+  font-size: 8rem;
+  font-weight: bold;
+  color: #dc3545; /* Rosso per evidenziare l'errore */
+  margin: 0;
+}
+
+/* Messaggio di errore */
+.not-found-message {
+  font-size: 1.5rem;
+  color: var(--titoli); /* Testo scuro */
+  margin-bottom: 20px;
+}
+
+.not-found-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: white; /* Testo bianco */
+    background-color: var(--pulsanti); /* Colore blu per il pulsante */
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.not-found-button:hover {
+    background-color: var(--pulsantiHover); /* Colore blu più chiaro al passaggio del mouse */
+    transform: scale(1.05);
+}

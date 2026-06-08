@@ -1,0 +1,7 @@
+<div class="popup-container" [class.show]="showAnimation">
+  <h2 [innerHTML]="data.title"></h2>
+  <p [innerHTML]="data.message"></p> <!-- Usa [innerHTML] per interpretare il messaggio come HTML -->
+  <button mat-button (click)="close()">Chiudi</button>
+</div>
+
+

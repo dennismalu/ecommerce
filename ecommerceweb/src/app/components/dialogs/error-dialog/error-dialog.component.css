@@ -1,0 +1,41 @@
+.popup-container {
+  text-align: center;
+  padding: 20px;
+  background-color: #ffebee; /* Rosso chiaro */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0; /* Inizialmente invisibile */
+  transform: scale(0.8); /* Riduzione iniziale delle dimensioni */
+  transition: opacity 0.4s ease, transform 0.4s ease; /* Transizione fluida */
+}
+
+/* Classe attiva quando il popup è visibile */
+.popup-container.show {
+  opacity: 1; /* Rende il popup visibile */
+  transform: scale(1); /* Ripristina le dimensioni originali */
+}
+
+h2 {
+  color: #d32f2f; /* Rosso scuro */
+  margin-bottom: 10px; /* Spazio tra il titolo e il messaggio */
+}
+
+p {
+  color: #c62828; /* Rosso medio */
+  margin-bottom: 20px; /* Spazio tra il messaggio e il pulsante */
+}
+
+button {
+  background-color: #d32f2f; /* Rosso scuro */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Effetto hover fluido */
+}
+
+button:hover {
+  background-color: #b71c1c; /* Rosso più scuro */
+}
+

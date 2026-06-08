@@ -1,0 +1,54 @@
+<div class="bg"> 
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" nzTip="Attendi...">
+        <div class="parent"> 
+            <div class="child">
+                <div nz-row class="titleDiv"> 
+                    <div nz-col nzSpan="24"> 
+                        <h1>Login</h1> 
+                    </div> 
+                </div>
+
+
+
+                <!--  Template-driven forms: la logica del form è definita direttamente nel template HTML;
+                      Reactive forms: la logica del form è definita nel codice TypeScript, come in questo caso  -->
+                <form nz-form [formGroup]="validateForm"> <!--  class="login-form" --> 
+                    <nz-form-item> 
+                        <nz-form-control nzErrorTip="Inserisci il tuo indirizzo e-mail!"> 
+                            <input type="text" nz-input placeholder="E-mail" formControlName="email" /> 
+                        </nz-form-control> 
+                    </nz-form-item> 
+
+                    <nz-form-item> 
+                        <nz-form-control nzErrorTip="Inserisci la tua password! "> 
+                            <input type="password" nz-input placeholder="Password" formControlName="password" /> 
+                        </nz-form-control> 
+                    </nz-form-item> 
+                        
+                    <div nz-row class="login-form-margin"> 
+                        <div nz-col> 
+                            <label nz-checkbox formControlName="ricordami">
+                                <span>Ricordami</span>
+                            </label> 
+                        </div>
+                    </div> 
+                        
+                        
+                    <div class="button-group">
+                        <button nz-button class="login-form-button" [nzType]="'primary'" (click)="login()">
+                        <!-- [disabled]="validateForm.invalid" impedisce all'utente di premere il pulsante finché tutti i campi non sono validi -->
+                            Accedi
+                        </button>                            
+                        <div class="divider">
+                            <span class="divider-text">oppure</span>
+                        </div>
+                        <button nz-button class="login-now-button" [nzType]="'default'" routerLink="/register">
+                            Registrati Ora!
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </nz-spin>
+</div>

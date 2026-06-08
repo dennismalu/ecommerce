@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { 
+    height: 100%; 
+}
+
+
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+
+:root {
+  --minheight:  calc(100vh - 141px); /* 64px navbar + 77px footer*/;
+  --sfondoNavbarFooter: #083973; 
+  --titoli: #083973;
+  --sfondoLinkNavbar: #1890ff;
+  --navLinksHover: rgba(255, 255, 255, 0.1);
+  --pulsanti: #083973; /* login e registrazione */
+  --pulsantiHover: #1890ff; /* footer, login e registrazione */
+  --linkHover: #0d4a8f;
+
+  --colorPriceValue: #52c41a;
+  --colorCategoryValue: #722ed1;
+  --colorStatusValue: #fa541c;
+}
+
