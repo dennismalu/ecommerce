@@ -1,0 +1,83 @@
+package it.progetto.ecommerce.controllers;
+
+import it.progetto.ecommerce.model.dto.CarrelloProductDTO;
+import it.progetto.ecommerce.model.dto.CategoryDTO;
+import it.progetto.ecommerce.model.entities.CarrelloProductEntity;
+import it.progetto.ecommerce.model.entities.UserDetailsEntity;
+import it.progetto.ecommerce.model.exceptions.DifferentUserException;
+import it.progetto.ecommerce.model.exceptions.ProductNotFoundException;
+import it.progetto.ecommerce.services.carrello.CarrelloService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@PreAuthorize("hasAuthority('USER')")   //gli endpoint possono essere richiamati solo con ruolo USER
+@RequestMapping("/api/customer")
+public class ClientController {
+
+    private final CarrelloService carrelloService;
+
+    @GetMapping("/carrello")
+    public ResponseEntity<?> getCarrello() {
+        List<CarrelloProductDTO> carrelloDTO = carrelloService.getCarrello();
+
+        if(carrelloDTO == null || carrelloDTO.isEmpty()){
+            return new ResponseEntity<>(new LinkedList<>(), HttpStatus.OK); //stato 200
+        }
+        else{
+            return new ResponseEntity<>(carrelloDTO, HttpStatus.OK); //stato 200
+        }
+    }
+
+    @PostMapping("/carrello/add")
+    public ResponseEntity<?> addToCarrello(
+            @RequestParam long idProdotto
+    ) {
+        try {
+            carrelloService.addToCarrello(idProdotto);
+            return new ResponseEntity<>(HttpStatus.OK); //stato 200
+        } catch (ProductNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        }
+    }
+
+    @PostMapping("/carrello/update")
+    public ResponseEntity<?> updateCarrello(
+        @RequestParam long idProdottoCarrello,
+        @RequestParam int quantity
+    ) {
+        //System.out.println(idProdottoCarrello + "  ---  " + quantity); //debug
+        try {
+            carrelloService.updateCarrello(idProdottoCarrello, quantity);
+            return new ResponseEntity<>(HttpStatus.OK); //stato 200
+        } catch(DifferentUserException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE); //stato 406
+        } catch (ProductNotFoundException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+    }
+    }
+
+    @PostMapping("/carrello/remove")
+    public ResponseEntity<?> removeFromCarrello(
+            @RequestParam long idProdottoCarrello
+    ) {
+        //System.out.println(idProdottoCarrello + "  ---  " + quantity); //debug
+        try {
+            carrelloService.removeFromCarrello(idProdottoCarrello);
+            return new ResponseEntity<>(HttpStatus.OK); //stato 200
+        } catch(DifferentUserException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE); //stato 406
+        } catch (ProductNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        }
+    }
+}

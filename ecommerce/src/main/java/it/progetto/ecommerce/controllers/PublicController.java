@@ -2,7 +2,7 @@ package it.progetto.ecommerce.controllers;
 
 import it.progetto.ecommerce.model.dto.CategoryDTO;
 import it.progetto.ecommerce.model.dto.ProductDTO;
-import it.progetto.ecommerce.model.dto.pageResponse.PageEntityResponseDTO;
+import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
 import it.progetto.ecommerce.model.mapper.CategoryMapper;
 import it.progetto.ecommerce.model.mapper.ProductMapper;
 import it.progetto.ecommerce.repository.CategoryRepository;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +28,11 @@ public class PublicController {
 
     @GetMapping("/categories")
     public ResponseEntity<?> getAllCategories() {
+
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetailsEntity userDetailsEntity = (UserDetailsEntity) auth.getPrincipal();
+//        System.out.println(userDetailsEntity);
+
         List<CategoryDTO> categories = categoryService.getAllCategoriesDTO();
         if(categories == null || categories.isEmpty()){
             return new ResponseEntity<>(new LinkedList<>(), HttpStatus.OK); //stato 200

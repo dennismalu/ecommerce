@@ -1,4 +1,4 @@
-package it.progetto.ecommerce.model.dto.authentication;
+package it.progetto.ecommerce.model.dto;
 
 import it.progetto.ecommerce.model.enums.UserRole;
 import lombok.Data;
@@ -9,4 +9,7 @@ public class UserDTO {
     private String name;
     private String email;
     private UserRole role;
+    private byte[] profileImg;
+    private String lastSearch;
 }
+

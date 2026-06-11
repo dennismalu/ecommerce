@@ -125,21 +125,5 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 
-
-
-  // Scopri i nostri prodotti
-  accediDashboard(){
-    if(this.localStorageService.hasToken() && this.localStorageService.isUserLoggedIn()){
-      var name = this.localStorageService.getName();
-      this.router.navigateByUrl("/user/dashboard");
-      this.NZnotification.success("Accesso effettuato!", "Bentornato " + name + "!", {nzDuration: 5000});
-    }
-    else if(this.localStorageService.hasToken() && this.localStorageService.isAdminLoggedIn()){
-      this.router.navigateByUrl("/admin/dashboard");
-      this.NZnotification.success("Accesso effettuato!", "Felice di rivederti capo!", {nzDuration: 5000});
-    }
-    else{
-      this.router.navigateByUrl("/login");
-    }
-  }
 }
+

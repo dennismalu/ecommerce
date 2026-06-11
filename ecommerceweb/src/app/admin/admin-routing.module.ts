@@ -14,8 +14,7 @@ const routes: Routes = [
   { path: "disable-products", component: AllProductsDisabledFilterBackendComponent, canActivate: [AdminGuard] },
   { path: "new-category", component: NewCategoryComponent, canActivate: [AdminGuard] },
   { path: "new-product", component: NewProductComponent, canActivate: [AdminGuard] },
-  { path: "product/:id", component: UpdateProductComponent, canActivate: [AdminGuard] },
-  { path: "search-product", component: SearchProductComponent, canActivate: [AdminGuard] }
+  { path: "update-product/:id", component: UpdateProductComponent, canActivate: [AdminGuard] }
 ];
 
 @NgModule({

@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecutiryConfiguration {
     private final JwtRequestFilter authFilter;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,9 +34,9 @@ public class WebSecutiryConfiguration {
                 .csrf()
                 .disable() //disattivo cors e csrf
                 .authorizeHttpRequests()
-                .requestMatchers("/authenticate", "/sign-up").permitAll() //endpoint che non vanno protetti con token JWT
+                .requestMatchers("/authenticate", "/sign-up", "/api/public/**").permitAll() //endpoint che non vanno protetti con token JWT
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/**").authenticated() //endpoint che vanno protetti con token JWT
+                .authorizeHttpRequests().requestMatchers("/api/admin/**", "/api/customer/**").authenticated() //endpoint che vanno protetti con token JWT
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -49,6 +53,13 @@ public class WebSecutiryConfiguration {
     //uso un'unica istanza di BCrypt() - come spiegato durante il corso il garbage collector di un'applicazione web non è performante
     //come quello di una semplice applicazione Java, passa molto meno spesso --> fare tante new porta a saturare la memoria!
 
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

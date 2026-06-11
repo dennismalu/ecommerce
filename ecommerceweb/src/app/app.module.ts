@@ -29,11 +29,11 @@ import { NewCategoryComponent } from './components/admin/new-category/new-catego
 import { ResponseErrorTokenInterceptor } from './interceptors/response-error-token-interceptor/response-error-token.interceptor';
 import { RequestAddTokenInterceptor } from './interceptors/request-add-token-interceptor/request-add-token.interceptor';
 import { NewProductComponent } from './components/admin/new-product/new-product.component';
-import { AllProductsComponent } from './components/all-products/all-products.component';
 import { UpdateProductComponent } from './components/admin/update-product/update-product.component';
 import { AllProductsFilterBackendComponent } from './components/all-products-filter-backend/all-products-filter-backend.component';
 import { AllProductsDisabledFilterBackendComponent } from './components/admin/all-products-disabled-filter-backend/all-products-disabled-filter-backend.component';
 import { SearchProductComponent } from './components/search-product/search-product.component';
+import { CarrelloComponent } from './components/user/carrello/carrello.component';
 registerLocaleData(it);
 
 @NgModule({
@@ -51,11 +51,11 @@ registerLocaleData(it);
     FooterComponent,
     NewCategoryComponent,
     NewProductComponent,
-    AllProductsComponent,
     UpdateProductComponent,
     AllProductsFilterBackendComponent,
     AllProductsDisabledFilterBackendComponent,
-    SearchProductComponent
+    SearchProductComponent,
+    CarrelloComponent
   ],
   imports: [
     BrowserModule,

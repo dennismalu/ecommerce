@@ -2,7 +2,7 @@ package it.progetto.ecommerce.controllers;
 
 import it.progetto.ecommerce.model.dto.CategoryDTO;
 import it.progetto.ecommerce.model.dto.ProductDTO;
-import it.progetto.ecommerce.model.dto.pageResponse.PageEntityResponseDTO;
+import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
 import it.progetto.ecommerce.model.entities.CategoryEntity;
 import it.progetto.ecommerce.model.entities.ProductEntity;
 import it.progetto.ecommerce.model.mapper.CategoryMapper;
@@ -17,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")

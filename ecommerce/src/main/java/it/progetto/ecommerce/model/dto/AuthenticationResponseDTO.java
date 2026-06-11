@@ -1,4 +1,4 @@
-package it.progetto.ecommerce.model.dto.authentication;
+package it.progetto.ecommerce.model.dto;
 
 import it.progetto.ecommerce.model.enums.UserRole;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ public class AuthenticationResponseDTO {
     private String jwtToken;
     private String name;
     //private String email;
-    private Long userId;
+    //private Long userId;
     private UserRole role;
     //private byte[] profileImg;
 }

@@ -1,16 +1,16 @@
 package it.progetto.ecommerce.services.user;
 
-import it.progetto.ecommerce.model.dto.authentication.SignUpDTO;
-import it.progetto.ecommerce.model.dto.authentication.UserDTO;
+import it.progetto.ecommerce.model.dto.SignUpDTO;
 import it.progetto.ecommerce.model.entities.UserEntity;
 import it.progetto.ecommerce.model.enums.UserRole;
-import it.progetto.ecommerce.model.mapper.UserMapper;
 import it.progetto.ecommerce.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +53,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(signUpDTO.getEmail());
         user.setRole(UserRole.USER);
         user.setPassword(bCryptPasswordEncoder.encode(signUpDTO.getPassword()));
+        user.setOrderItems(new LinkedList<>());
+        user.setLastSearch(null);
         return userRepository.save(user); //salva nel DB
-
     }
 
 

@@ -1,10 +1,9 @@
 package it.progetto.ecommerce.services.product;
 
 import it.progetto.ecommerce.model.dto.ProductDTO;
-import it.progetto.ecommerce.model.dto.pageResponse.PageEntityResponseDTO;
+import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
 import it.progetto.ecommerce.model.entities.ProductEntity;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface ProductService {

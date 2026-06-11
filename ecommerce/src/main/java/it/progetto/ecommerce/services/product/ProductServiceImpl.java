@@ -1,8 +1,7 @@
 package it.progetto.ecommerce.services.product;
 
-import it.progetto.ecommerce.model.dto.CategoryDTO;
 import it.progetto.ecommerce.model.dto.ProductDTO;
-import it.progetto.ecommerce.model.dto.pageResponse.PageEntityResponseDTO;
+import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
 import it.progetto.ecommerce.model.entities.CategoryEntity;
 import it.progetto.ecommerce.model.entities.ProductEntity;
 import it.progetto.ecommerce.model.mapper.ProductMapper;
@@ -10,14 +9,12 @@ import it.progetto.ecommerce.repository.CategoryRepository;
 import it.progetto.ecommerce.repository.ProductRepository;
 import it.progetto.ecommerce.utils.ProductUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 

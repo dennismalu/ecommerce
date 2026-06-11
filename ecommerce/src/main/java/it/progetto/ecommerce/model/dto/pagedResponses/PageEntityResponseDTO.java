@@ -1,4 +1,4 @@
-package it.progetto.ecommerce.model.dto.pageResponse;
+package it.progetto.ecommerce.model.dto.pagedResponses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

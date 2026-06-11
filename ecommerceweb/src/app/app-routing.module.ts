@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './components/register/register.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { UserModule } from './user/user.module';
 import { NoAuthGuard } from './guards/no-auth-guard/no-auth.guard';
-import { LoggedInGuard } from './guards/logged-in-guard/logged-in.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SearchProductComponent } from './components/search-product/search-product.component';
+import { AllProductsFilterBackendComponent } from './components/all-products-filter-backend/all-products-filter-backend.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: 'full' },
@@ -16,6 +14,8 @@ const routes: Routes = [
   { path: "home", component: HomeComponent }, //, canActivate: [LoggedInGuard]
   { path: "login", component: LoginComponent, canActivate: [NoAuthGuard] },
   { path: "register", component: RegisterComponent, canActivate: [NoAuthGuard] },
+  { path: "products", component: AllProductsFilterBackendComponent  },
+  { path: "search-product", component: SearchProductComponent },
   { path: "admin", loadChildren: () => import("./admin/admin.module").then(m => m.AdminModule) },
   { path: "user", loadChildren: () => import("./user/user.module").then(m => m.UserModule) },
 

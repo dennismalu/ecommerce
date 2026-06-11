@@ -25,33 +25,6 @@ export class LocalStorageService {
 
 
 
-  saveUserId(userId: any){
-    if (this.isBrowser()) {
-      localStorage.removeItem('userId')
-      localStorage.setItem('userId', userId.toString());
-    }
-  }
-
-  getUserId(): number | null {
-    if (this.isBrowser()) {
-      const userId = localStorage.getItem('userId');
-      if (!userId) return null;
-  
-      const id = parseInt(userId, 10);
-      if(!id) return null;
-      return id;
-    }
-    return null;
-  }
-
-  removeUserId(): void{
-    if (this.isBrowser()) {
-      localStorage.removeItem('userId');
-    }
-  }
-
-
-
   saveName(name: any){
     if (this.isBrowser()) {
       localStorage.removeItem('name')

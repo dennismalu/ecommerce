@@ -159,17 +159,26 @@
           
           <hr />  <!-- barra orizzontale -->
 
-          <h5> 
+          <!-- ADMIN -->
+          <h5 *ngIf="isAdminLoggedIn"> 
             Prezzo: <b class="price">{{ product.price }}€</b> - 
             Categoria: <b class="category">{{ product.categoryName }}</b>  -
-            Stato: <b class="status" *ngIf="isAdminLoggedIn">{{ product.disabled ? 'disabilitato' : 'abilitato' }}</b>
+            Stato: <b class="status">{{ product.disabled ? 'disabilitato' : 'abilitato' }}</b>
+          </h5> 
+
+          <!-- USER E UTENTE NON LOGGATO-->
+          <h5 *ngIf="!isAdminLoggedIn"> 
+            Prezzo: <b class="price">{{ product.price }}€</b> - 
+            Categoria: <b class="category">{{ product.categoryName }}</b>
           </h5> 
 
           <hr /> 
 
-           <!-- tasti "Modifica", "Disabilita" ed "Elimina" SOLO per admin -->
+
+
+           <!-- tasti "Modifica", "Disabilita" ed "Elimina" SOLO per ADMIN -->
           <div style="float: right" *ngIf="isAdminLoggedIn"> 
-            <button style="margin-left: 10px" nzSize="small" nz-button nzType="primary" routerLink="/admin/product/{{product.id}}"> 
+            <button style="margin-left: 10px" nzSize="small" nz-button nzType="primary" routerLink="/admin/update-product/{{product.id}}"> 
               Modifica 
             </button> 
 
@@ -182,6 +191,29 @@
               Elimina 
             </button> 
           </div>
+
+          <!-- tasti "Aggiungi al carrello" e "Rimuovi dal carrello" solo per USER -->
+          <div style="float: right" *ngIf="isUserLoggedIn"> 
+            <button class="green-button" *ngIf="!isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
+              nz-button nzType="primary" (click)="aggiungiAlCarrello(product.id)"> 
+              Aggiungi al carrello 
+            </button> 
+
+            <button *ngIf="isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
+              nz-button nzType="primary" nzDanger (click)="rimuoviDalCarrello(product.id)"> 
+              Rimuovi dal carrello
+            </button> 
+          </div>
+
+          <!-- tasto "Aggiungi al carrello" con messaggio di errore per utenti non loggati -->
+          <div style="float: right" *ngIf="!isAdminLoggedIn && !isUserLoggedIn"> 
+            <button class="green-button" *ngIf="!isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
+              nz-button nzType="primary" (click)="erroreUtenteNonLoggato()"> 
+              Aggiungi al carrello 
+            </button> 
+          </div>
+
+
 
         </div> 
       </div> 

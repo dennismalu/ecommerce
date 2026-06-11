@@ -1,0 +1,153 @@
+:host {
+  display: block;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+.container {
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.container-div{
+  min-width: 430px;
+}
+
+/* Card prodotto */
+.child {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin-bottom: 18px;
+  transition: all 0.25s ease;
+  border: 1px solid #e8e8e8;
+}
+
+.child:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+}
+
+/* Immagine prodotto */
+.profile {
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  padding: 4px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.profile:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Titolo prodotto */
+h1 {
+  color: var(--titoli, #1890ff);
+  font-size: 28px;
+  margin: 0 0 8px 0;
+}
+
+h2 {
+  color: var(--titoli, #1890ff);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Descrizione prodotto */
+p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+/* Separatori */
+hr {
+  border: none;
+  border-top: 1px solid #e8e8e8;
+  margin: 14px 0;
+}
+
+/* Informazioni prezzo e categoria */
+h5 {
+  color: #333;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  text-align: left;
+}
+
+h5 b {
+  font-weight: 600;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .profile {
+    max-width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  h2 {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.no-products {
+  text-align: center;
+  padding: 24px;
+  color: #999;
+}
+
+
+
+.green-button{
+  color: white; 
+  background-color: green;
+}
+
+.green-button:hover{
+  color: white; 
+  background-color: rgb(22, 168, 22);
+}
+
+

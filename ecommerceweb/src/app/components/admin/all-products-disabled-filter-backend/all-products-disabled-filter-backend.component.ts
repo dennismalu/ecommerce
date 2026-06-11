@@ -168,7 +168,7 @@ export class AllProductsDisabledFilterBackendComponent {
     this.productService.enableProduct(id).subscribe({
       next: (response) => {
         //console.log(response);
-        this.dialogService.openSuccessDialog("Operazione completata con successo!", "Prodotto attivato correttamente!");
+        this.dialogService.openSuccessDialog("Operazione completata con successo!", "Prodotto abilitato correttamente!");
         //this.router.navigateByUrl("/admin/dashboard");
         this.setElements(); //ricarico gli elementi
       },

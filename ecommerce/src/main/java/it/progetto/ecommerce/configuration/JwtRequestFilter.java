@@ -1,7 +1,12 @@
 package it.progetto.ecommerce.configuration;
 
+import it.progetto.ecommerce.model.entities.UserDetailsEntity;
+import it.progetto.ecommerce.model.entities.UserEntity;
+import it.progetto.ecommerce.model.mapper.UserMapper;
+import it.progetto.ecommerce.repository.UserRepository;
 import it.progetto.ecommerce.services.user.UserDetailsServiceImpl;
 import it.progetto.ecommerce.services.jwt.JwtService;
+import it.progetto.ecommerce.services.user.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,13 +14,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 @Component
 @RequiredArgsConstructor
@@ -23,8 +32,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     //OncePerRequestFilter --> il filtro viene eseguito una sola volta per ogni richiesta HTTP
 
 
-    private final UserDetailsServiceImpl userDetailsService;
+    //private final UserDetailsServiceImpl userDetailsService;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
 
     @Override
@@ -45,17 +56,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 //verifica se l'utente non è già autenticato controllando il contesto di sicurezza (SecurityContextHolder)
                 //--> se getAuthentication() è null significa che l'utente non è autenticato
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+                UserEntity userEntity = userRepository.findFirstByEmail(email);
+                if(userEntity == null) {
+                    throw new UsernameNotFoundException(email + " not found", null);
+                }
+                UserDetailsEntity userDetailsEntity = userMapper.toUserDetailsEntity(userEntity);
 
                 //se l'utente non è autenticato verifico il suo token e, se è tutto ok, lo autentico
                 //(aggiungo il token al contesto di sicurezza --> l'autenticazione sarà valida solo per la chiamata http corrente)
-                if(jwtService.validateToken(token, userDetails)) { //email corretta e token non scaduto
+                if(jwtService.validateToken(token, userDetailsEntity)) { //email corretta e token non scaduto
                     //UsernamePasswordAuthenticationToken è un oggetto che rappresenta l'autenticazione dell'utente
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
-                                    userDetails,
+                                    userDetailsEntity,
                                     null, //non è necessario fornire una password perché l'autenticazione è basata sul token
-                                    userDetails.getAuthorities()
+                                    userDetailsEntity.getAuthorities()
                             );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); //imposta i dettagli dell'autenticazione (indirizzo IP e sessione)
                     SecurityContextHolder.getContext().setAuthentication(authToken); //imposta l'autenticazione nel contesto di sicurezza

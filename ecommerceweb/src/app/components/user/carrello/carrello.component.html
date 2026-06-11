@@ -1,0 +1,104 @@
+<div class="container container-div">
+
+  <!-- HEADER -->
+  <div class="cart-header child" style="padding: 20px; margin-bottom: 18px;">
+    <h1>Il tuo carrello</h1>
+    <div *ngIf="enabledItems.length === 0 && disabledItems.length === 0" class="no-products">
+      <h3>Carrello vuoto</h3>
+      <p>Non hai ancora aggiunto prodotti al carrello.</p>
+    </div>
+  </div>
+
+  <!-- SEZIONE PRODOTTI ABILITATI -->
+  <div *ngIf="enabledItems.length > 0" class="product-grid container-div">
+    <div class="child" *ngFor="let item of enabledItems">
+      <nz-row>
+        <div nz-col nzSpan="8">
+          <img class="profile" [src]="item.product.image" alt="immagine_prodotto" />
+        </div>
+
+        <div nz-col nzSpan="16" style="padding-left: 15px;">
+          <h2>{{ item.product.name }}</h2>
+          <p>{{ (item.product.description || '').substring(0, 65) + ((item.product.description!=null && item.product.description.length > 65) ? '...' : '') }}</p>
+
+          <hr />
+
+          <h5>
+            Prezzo: <b class="price">{{ item.product.price }}€</b> -
+            Categoria: <b class="category">{{ item.product.categoryName }}</b>
+          </h5>
+
+          <hr />
+
+          <!-- Controllo quantità -->
+          <div style="display:flex; align-items:center; gap:10px; margin-top:12px;">
+            <button nz-button nzType="default" nzSize="small" (click)="diminuisciQuantita(item)">
+              -
+            </button>
+
+            <div style="min-width:48px; text-align:center; font-weight:600;">
+              {{ item.quantity }}
+            </div>
+
+            <button nz-button nzType="default" nzSize="small" (click)="aumentaQuantita(item)">
+              +
+            </button>
+
+            <div style="margin-left:auto;">
+              <button nz-button nzType="primary" nzSize="small" nzDanger (click)="rimuoviDalCarrello(item)">
+                Rimuovi
+              </button>
+            </div>
+          </div>
+        </div>
+      </nz-row>
+    </div>
+  </div>
+
+  <!-- Totale (solo abilitati) -->
+  <div *ngIf="enabledItems.length > 0" class="child" style="display:flex; flex-direction: column; align-items:center; justify-content:end; gap: 10px;">
+    <h3>Totale ordine</h3>
+    <p style="font-size:22px; font-weight:700; color:var(--titoli, #1890ff);">
+      {{ getTotal() }}€
+    </p>
+    <button class="green-button" nzSize="large" nz-button nzType="primary" (click)="ordinaCarrello()"> 
+      Procedi al pagamento 
+    </button> 
+  </div>
+
+  <!-- SEZIONE NON PIÙ DISPONIBILI -->
+  <div *ngIf="disabledItems.length > 0" style="margin-top: 24px;">
+    <h3 style="color:#666; margin-bottom: 12px;">Non più disponibili</h3>
+
+    <div class="product-grid container-div">
+      <div class="child" *ngFor="let item of disabledItems">
+        <nz-row>
+          <div nz-col nzSpan="8">
+            <img class="profile" [src]="item.product.image" alt="immagine_prodotto" />
+          </div>
+
+          <div nz-col nzSpan="16" style="padding-left: 15px;">
+            <h2>{{ item.product.name }}</h2>
+            <p>{{ (item.product.description || '').substring(0, 65) + ((item.product.description!=null && item.product.description.length > 65) ? '...' : '') }}</p>
+
+            <hr />
+
+            <h5>
+              Prezzo: <b class="price">{{ item.product.price }}€</b> -
+              Categoria: <b class="category">{{ item.product.categoryName }}</b>
+            </h5>
+
+            <hr />
+
+            <div style="display:flex; justify-content:flex-end;">
+              <button nz-button nzType="primary" nzSize="small" nzDanger (click)="rimuoviDalCarrello(item)">
+                Rimuovi
+              </button>
+            </div>
+          </div>
+        </nz-row>
+      </div>
+    </div>
+  </div>
+
+</div>

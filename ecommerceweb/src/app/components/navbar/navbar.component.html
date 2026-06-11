@@ -15,11 +15,14 @@
 
 
 
-  <!-- Versione DESKTOP: tutti i link visibili -->
+  <!-- Versione DESKTOP -->
   <!-- links per utente che non ha effettuato l'accesso -->
   <div class="nav-links desktop-only" *ngIf="!isUserLoggedIn && !isAdminLoggedIn">
     <a nz-button nzType="link" routerLink="/login" routerLinkActive="active">Accedi</a>
     <a nz-button nzType="link" routerLink="/register" routerLinkActive="active">Registrati</a>
+    <button nz-button nzType="text" class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
+      Menu
+    </button>
   </div>
 
   <!-- links per admin -->
@@ -56,12 +59,15 @@
     <ng-container *ngIf="!isUserLoggedIn && !isAdminLoggedIn">
       <a nz-button nzType="link" routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Accedi</a>
       <a nz-button nzType="link" routerLink="/register" routerLinkActive="active" (click)="closeMenu()">Registrati</a>
+      <a nz-button nzType="link" routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Tutti i prodotti</a>
+      <a nz-button nzType="link" routerLink="/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
     </ng-container>
 
     <!-- links per admin -->
     <ng-container *ngIf="isAdminLoggedIn">
       <a class="mobile-only" nz-button nzType="link" routerLink="/admin/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
-      <a nz-button nzType="link" routerLink="/admin/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
+      <a nz-button nzType="link" routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Tutti i prodotti</a>
+      <a nz-button nzType="link" routerLink="/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
       <a nz-button nzType="link" routerLink="/admin/new-category" routerLinkActive="active" (click)="closeMenu()">Aggiungi categoria</a>
       <a nz-button nzType="link" routerLink="/admin/new-product" routerLinkActive="active" (click)="closeMenu()">Aggiungi prodotto</a>
       <a nz-button nzType="link" routerLink="/admin/disable-products" routerLinkActive="active" (click)="closeMenu()">Prodotti disabilitati</a>
@@ -71,7 +77,9 @@
     <!-- links per utente semplice -->
     <ng-container *ngIf="isUserLoggedIn && !isAdminLoggedIn">
       <a class="mobile-only" nz-button nzType="link" routerLink="/user/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
-      <a nz-button nzType="link" routerLink="/user/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
+      <a nz-button nzType="link" routerLink="/user/carrello" routerLinkActive="active" (click)="closeMenu()">Carrello</a>
+      <a nz-button nzType="link" routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Tutti i prodotti</a>
+      <a nz-button nzType="link" routerLink="/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
       <a class="mobile-only" nz-button nzType="link" (click)="logoutAndClose()">Logout</a>
     </ng-container>
 

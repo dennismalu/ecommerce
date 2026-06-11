@@ -5,12 +5,32 @@ import { LocalStorageService } from '../../services/storage-service/local-storag
 import { CategoryService } from '../../services/api-services/category-service/category.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UtilsService } from '../../services/utils-service/utils.service';
+import { CarrelloService } from '../../services/api-services/carrello-service/carrello.service';
 
 
 //per le categorie e la scelta dell'ordinamento
 interface SelectOption {
   value: number;
   label: string;
+}
+
+//per il carrello
+interface Product {
+  id: number;
+  name: string;
+  image?: string; // base64 or url
+  description?: string | null;
+  price: number;
+  categoryId?: number;
+  categoryName?: string;
+  disabled?: boolean; // true => non abilitato
+  // altri campi se servono
+}
+
+interface CartItem {
+  id: number;
+  product: Product;
+  quantity: number;
 }
 
 
@@ -39,7 +59,6 @@ export class SearchProductComponent{
     { value: 3, label: 'Prezzo (Decrescente)' }
   ];
 
-
   selectedSort: number = 0;
   selectedCategory: number = -1; //-1 --> tutte le categorie (all)
 
@@ -48,8 +67,11 @@ export class SearchProductComponent{
   totalPages: number = 1;
   totalElements: number = 0;
 
+  cartItems: CartItem[] = [];
+
 
   constructor(
+    private carrelloService: CarrelloService,
     private productService: ProductService,
     private categoryService: CategoryService,
     private dialogService: DialogService,
@@ -67,9 +89,7 @@ export class SearchProductComponent{
   }
 
 
-  ngOnInit(){
-    //await this.resetFilters(); //fa anche la GET dei prodotti - await: attende il completamento 
-    //console.log(this.products)
+  async ngOnInit(){
     this.setCategories(); //fa la GET delle categorie
 
     //OBIETTIVO: la pagina non deve venire renderizzata sul server (dove non 
@@ -93,6 +113,10 @@ export class SearchProductComponent{
       this.isAdminLoggedIn = status;
       //console.log('Current user status:', this.currentUserStatus); //log
     });
+
+    if(this.isUserLoggedIn){
+      this.loadCart();
+    }
   }
 
 
@@ -143,7 +167,8 @@ export class SearchProductComponent{
     if(this.searchDone){
       this.products = []; //creo la lista vuota a cui aggiungere i singoli prodotti
 
-      if(this.isUserLoggedIn){
+      //user e utente non registrato
+      if(!this.isAdminLoggedIn){
         this.productService.searchProductByTitleFilteredSortered(this.nameSearch, this.currentPage, this.pageSize, this.selectedSort, this.selectedCategory).subscribe((res) =>{
           //console.log(res);
           this.totalPages = res.totalPages || 1; //1 in caso di valore mancante (null)
@@ -155,7 +180,7 @@ export class SearchProductComponent{
           });
         });
       }
-      else if(this.isAdminLoggedIn){
+      else{ // if(this.isAdminLoggedIn)
         this.withDisabled = this.searchForm.value.includeDisabled;
         this.productService.searchProductByTitleWithDisabledFilteredSortered(this.nameSearch, this.withDisabled, this.currentPage, this.pageSize, this.selectedSort, this.selectedCategory).subscribe((res) =>{
           //console.log(res);
@@ -208,12 +233,39 @@ export class SearchProductComponent{
 
 
 
+
+
+
+
+
+
+
+  //ADMIN
+
   disableProduct(id: number){
     //console.log(id);
     this.productService.disableProduct(id).subscribe({
       next: (response) => {
         //console.log(response);
-        this.dialogService.openSuccessDialog("Operazione completata con successo!", "Prodotto disattivato correttamente!");
+        this.dialogService.openSuccessDialog("Operazione completata con successo!", "Prodotto disabilitato correttamente!");
+        //this.router.navigateByUrl("/admin/dashboard");
+        this.setElements(); //ricarico gli elementi
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.status != 401) {
+          this.dialogService.openErrorDialog("Errore", error.error);
+        }
+      }
+    });
+  }
+
+    enableProduct(id: number){
+    //console.log(id);
+    this.productService.enableProduct(id).subscribe({
+      next: (response) => {
+        //console.log(response);
+        this.dialogService.openSuccessDialog("Operazione completata con successo!", "Prodotto abilitato correttamente!");
         //this.router.navigateByUrl("/admin/dashboard");
         this.setElements(); //ricarico gli elementi
       },
@@ -245,6 +297,113 @@ export class SearchProductComponent{
     });
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //USER
+
+  loadCart() {
+    // ATTENZIONE: backend non ritorna paginato (come richiesto)
+    // Supponiamo che carrelloService.getCarrello() ritorni Observable<CartItem[]>
+    this.carrelloService.getCarrello().subscribe({
+      next: (items: any[]) => {
+        // mappatura difensiva
+        this.cartItems = items.map(it => ({
+          product: {
+            id: it.product.id,
+            name: it.product.name,
+            image: it.product.image ? ('data:image/jpeg;base64,' + it.product.image) : it.product.image,
+            description: it.product.description,
+            price: it.product.price,
+            categoryId: it.product.categoryId,
+            categoryName: it.product.categoryName,
+            disabled: it.product.disabled
+          },
+          id: it.id,
+          quantity: it.quantity
+        }));
+      },
+      error: (err) => {
+        console.error('Errore caricamento carrello', err);
+        this.dialogService.openErrorDialog('Errore', 'Impossibile caricare il carrello.');
+      }
+    });
+  }
+
+
+  // aggiungo al carrello (richiamata dal template)
+  aggiungiAlCarrello(idProdotto: number) {
+    // chiami il servizio per rimuovere l'elemento
+    this.carrelloService.addToCart(idProdotto).subscribe({
+      next: (res) => {
+        this.loadCart();
+        // aggiorno la vista localmente
+        //this.cartItems = this.cartItems.filter(ci => ci.product.id !== item.product.id);
+        //this.splitEnabledDisabled();
+        //this.dialogService.openSuccessDialog('Rimosso', 'Prodotto rimosso dal carrello');
+      },
+      error: (err) => {
+        console.error(err);
+        this.dialogService.openErrorDialog('Errore', 'Impossibile aggiungere il prodotto dal carrello');
+        this.loadCart();
+      }
+    });
+  }
+
+
+  // rimuovo dal carrello (richiamata dal template)
+  rimuoviDalCarrello(idProdotto: number) {
+    let cartItem: CartItem|null = null;
+    for(const item of this.cartItems){
+      if(item.product.id == idProdotto){
+        cartItem = item;
+        break;
+      }
+    }
+    
+    if(cartItem != null){
+      // chiamo il servizio per rimuovere l'elemento
+      this.carrelloService.removeFromCart(cartItem.id).subscribe({
+        next: (res) => {
+          this.loadCart();
+          // aggiorno la vista localmente
+          //this.cartItems = this.cartItems.filter(ci => ci.product.id !== item.product.id);
+          //this.splitEnabledDisabled();
+          //this.dialogService.openSuccessDialog('Rimosso', 'Prodotto rimosso dal carrello');
+        },
+        error: (err) => {
+          console.error(err);
+          this.dialogService.openErrorDialog('Errore', 'Impossibile rimuovere il prodotto dal carrello');
+          this.loadCart();
+        }
+      });
+    }
+  }
+
+  //true se il prodotto è nella carta
+  isInCart(productId: number): boolean {
+    for(const item of this.cartItems){
+      if(item.product.id == productId){
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  erroreUtenteNonLoggato(){
+    this.dialogService.openErrorDialog('Errore', 'Accedi al sito per aggiungere il prodotto al carrello');
+  }
 
 }
 

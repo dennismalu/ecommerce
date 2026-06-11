@@ -79,14 +79,17 @@ export class LoginComponent {
       this.isSpinning = true;
       this.authService.login(this.validateForm.value).subscribe({
         next: (response) => {
-          this.NZnotification.success("Operazione completata", "Login effettuato con successo!", {nzDuration: 5000});
+          //this.NZnotification.success("Operazione completata", "Login effettuato con successo!", {nzDuration: 5000});
           //this.dialogService.openSuccessDialog("Operazione completata", "Login avvenuto con successo!");
           //console.log(response);
           if(this.localStorageService.isAdminLoggedIn()){
             this.router.navigateByUrl("/admin/dashboard");
+            this.NZnotification.success("Accesso effettuato!", "Felice di rivederti capo!", {nzDuration: 5000});
           }
           else if(this.localStorageService.isUserLoggedIn()){
+            var name = this.localStorageService.getName();
             this.router.navigateByUrl("/user/dashboard");
+            this.NZnotification.success("Accesso effettuato!", "Bentornato " + name + "!", {nzDuration: 5000});
           }
         }
         //, //errore "credenziali non corrette" gestito dall'interceptor (stato 401)

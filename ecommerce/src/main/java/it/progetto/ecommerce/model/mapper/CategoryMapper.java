@@ -1,9 +1,7 @@
 package it.progetto.ecommerce.model.mapper;
 
 import it.progetto.ecommerce.model.dto.CategoryDTO;
-import it.progetto.ecommerce.model.dto.authentication.UserDTO;
 import it.progetto.ecommerce.model.entities.CategoryEntity;
-import it.progetto.ecommerce.model.entities.UserEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

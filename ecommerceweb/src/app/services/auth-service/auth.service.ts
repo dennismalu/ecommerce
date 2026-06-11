@@ -33,14 +33,13 @@ export class AuthService {
         // Estrai i dati dalla risposta
         const jwtToken = response.jwtToken;
         const name = response.name;
-        const userId = response.userId;
+        //const userId = response.userId;
         const userRole = response.role;
 
         // Salva i dati nel localStorage (se non sono vuoti)
-        if (jwtToken && userId && userRole) {
+        if (jwtToken && userRole) {
           this.localStorageService.saveToken(jwtToken);
           this.localStorageService.saveName(name);
-          this.localStorageService.saveUserId(userId);
           this.localStorageService.saveUserRole(userRole);
           if (authenticationRequest.ricordami) {
             this.localStorageService.saveEmail(authenticationRequest.email);
@@ -65,7 +64,6 @@ export class AuthService {
   logout(): void {
     this.localStorageService.removeToken();
     this.localStorageService.removeName();
-    this.localStorageService.removeUserId();
     this.localStorageService.removeUserRole();
   }
 

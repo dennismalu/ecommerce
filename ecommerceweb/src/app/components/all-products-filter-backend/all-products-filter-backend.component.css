@@ -249,3 +249,15 @@ nz-col {
 }
 
 
+
+.green-button{
+  color: white; 
+  background-color: green;
+}
+
+.green-button:hover{
+  color: white; 
+  background-color: rgb(22, 168, 22);
+}
+
+

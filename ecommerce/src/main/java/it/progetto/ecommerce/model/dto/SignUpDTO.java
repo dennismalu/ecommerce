@@ -1,4 +1,4 @@
-package it.progetto.ecommerce.model.dto.authentication;
+package it.progetto.ecommerce.model.dto;
 
 import lombok.Data;
 
