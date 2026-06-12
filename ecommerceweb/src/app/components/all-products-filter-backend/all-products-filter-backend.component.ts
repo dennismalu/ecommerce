@@ -4,6 +4,7 @@ import { DialogService } from '../../services/dialog-service/dialog-service.serv
 import { LocalStorageService } from '../../services/storage-service/local-storage.service';
 import { CategoryService } from '../../services/api-services/category-service/category.service';
 import { CarrelloService } from '../../services/api-services/carrello-service/carrello.service';
+import { ListaDesideriService } from '../../services/api-services/lista-desideri-service/lista-desideri.service';
 
 
 //per le categorie e la scelta dell'ordinamento
@@ -31,6 +32,11 @@ interface CartItem {
   quantity: number;
 }
 
+//per la lista desideri
+interface ListaDesideriItem {
+  id: number;
+  product: Product;
+}
 
 @Component({
   selector: 'app-all-products-filter-backend',
@@ -61,10 +67,12 @@ export class AllProductsFilterBackendComponent {
   totalElements: number = 0;
 
   cartItems: CartItem[] = [];
+  listaDesideriItems: ListaDesideriItem[] = [];
 
 
   constructor(
     private carrelloService: CarrelloService,
+    private listaDesideriService: ListaDesideriService,
     private productService: ProductService,
     private categoryService: CategoryService,
     private dialogService: DialogService,
@@ -103,6 +111,7 @@ export class AllProductsFilterBackendComponent {
 
     if(this.isUserLoggedIn){
       this.loadCart();
+      this.loadListaDesideri();
     }
   }
 
@@ -251,8 +260,6 @@ export class AllProductsFilterBackendComponent {
   //USER
 
   loadCart() {
-    // ATTENZIONE: backend non ritorna paginato (come richiesto)
-    // Supponiamo che carrelloService.getCarrello() ritorni Observable<CartItem[]>
     this.carrelloService.getCarrello().subscribe({
       next: (items: any[]) => {
         // mappatura difensiva
@@ -273,7 +280,7 @@ export class AllProductsFilterBackendComponent {
       },
       error: (err) => {
         console.error('Errore caricamento carrello', err);
-        this.dialogService.openErrorDialog('Errore', 'Impossibile caricare il carrello.');
+        this.dialogService.openErrorDialog('Errore', 'Impossibile caricare il carrello');
       }
     });
   }
@@ -338,6 +345,105 @@ export class AllProductsFilterBackendComponent {
 
     return false;
   }
+
+
+  loadListaDesideri(){
+    this.listaDesideriService.getListaDesideri().subscribe({
+      next: (items: any[]) => {
+        // mappatura difensiva
+        this.listaDesideriItems = items.map(it => ({
+          product: {
+            id: it.product.id,
+            name: it.product.name,
+            image: it.product.image ? ('data:image/jpeg;base64,' + it.product.image) : it.product.image,
+            description: it.product.description,
+            price: it.product.price,
+            categoryId: it.product.categoryId,
+            categoryName: it.product.categoryName,
+            disabled: it.product.disabled
+          },
+          id: it.id
+        }));
+      },
+      error: (err) => {
+        console.error('Errore caricamento lista desideri', err);
+        this.dialogService.openErrorDialog('Errore', 'Impossibile caricare la lista desideri');
+      }
+    });
+  }
+
+  // aggiungo alla lista desideri (richiamata dal template)
+  aggiungiAllaListaDesideri(idProdotto: number) {
+    // chiami il servizio per rimuovere l'elemento
+    this.listaDesideriService.addToListaDesideri(idProdotto).subscribe({
+      next: (res) => {
+        this.loadListaDesideri();
+      },
+      error: (err) => {
+        console.error(err);
+        this.dialogService.openErrorDialog('Errore', 'Impossibile aggiungere il prodotto alla lista desideri');
+        this.loadListaDesideri();
+      }
+    });
+  }
+
+
+  // rimuovo dal carrello (richiamata dal template)
+  rimuoviDallaListaDesideri(idProdotto: number) {
+    let listaDesideriItem: ListaDesideriItem|null = null;
+    for(const item of this.listaDesideriItems){
+      if(item.product.id == idProdotto){
+        listaDesideriItem = item;
+        break;
+      }
+    }
+    
+    if(listaDesideriItem != null){
+      // chiamo il servizio per rimuovere l'elemento
+      this.listaDesideriService.removeFromListaDesideri(listaDesideriItem.id).subscribe({
+        next: (res) => {
+          this.loadListaDesideri();
+        },
+        error: (err) => {
+          console.error(err);
+          this.dialogService.openErrorDialog('Errore', 'Impossibile rimuovere il prodotto dalla lista desideri');
+          this.loadListaDesideri();
+        }
+      });
+    }
+  }
+
+  //true se il prodotto è nella lista desideri
+  isInListaDesideri(productId: number): boolean {
+    for(const item of this.listaDesideriItems){
+      if(item.product.id == productId){
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   erroreUtenteNonLoggato(){
     this.dialogService.openErrorDialog('Errore', 'Accedi al sito per aggiungere il prodotto al carrello');

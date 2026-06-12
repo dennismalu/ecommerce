@@ -14,4 +14,5 @@ public interface CarrelloService {
     void addToCarrello(long idProdotto) throws ProductNotFoundException;
     void updateCarrello(long idProdottoCarrello, int quantity) throws DifferentUserException, ProductNotFoundException;
     void removeFromCarrello(long idProdottoCarrello) throws DifferentUserException, ProductNotFoundException ;
+
 }

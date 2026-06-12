@@ -53,7 +53,8 @@ public class UserServiceImpl implements UserService {
         user.setEmail(signUpDTO.getEmail());
         user.setRole(UserRole.USER);
         user.setPassword(bCryptPasswordEncoder.encode(signUpDTO.getPassword()));
-        user.setOrderItems(new LinkedList<>());
+        user.setCarrelloProducts(new LinkedList<>());
+        user.setListaDesideriProducts(new LinkedList<>());
         user.setLastSearch(null);
         return userRepository.save(user); //salva nel DB
     }

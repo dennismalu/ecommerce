@@ -34,6 +34,7 @@ import { AllProductsFilterBackendComponent } from './components/all-products-fil
 import { AllProductsDisabledFilterBackendComponent } from './components/admin/all-products-disabled-filter-backend/all-products-disabled-filter-backend.component';
 import { SearchProductComponent } from './components/search-product/search-product.component';
 import { CarrelloComponent } from './components/user/carrello/carrello.component';
+import { ListaDesideriComponent } from './components/user/lista-desideri/lista-desideri.component';
 registerLocaleData(it);
 
 @NgModule({
@@ -55,7 +56,8 @@ registerLocaleData(it);
     AllProductsFilterBackendComponent,
     AllProductsDisabledFilterBackendComponent,
     SearchProductComponent,
-    CarrelloComponent
+    CarrelloComponent,
+    ListaDesideriComponent
   ],
   imports: [
     BrowserModule,

@@ -203,11 +203,15 @@
 
            <!-- tasti "Modifica", "Disabilita" ed "Elimina" SOLO per ADMIN -->
           <div style="float: right" *ngIf="isAdminLoggedIn"> 
-            <button style="margin-left: 10px" nzSize="small" nz-button nzType="primary" routerLink="/admin/update-product/{{product.id}}"> 
+            <button style="margin-left: 10px; margin-bottom: 6px;" nzSize="small" nz-button nzType="primary" routerLink="/admin/update-product/{{product.id}}"> 
               Modifica 
             </button> 
 
-            <button style="margin-left: 10px" nzSize="small" nz-button nzType="primary" (click)="disableProduct(product.id)"> 
+            <button *ngIf="product.disabled" style="margin-left: 10px; margin-bottom: 6px;" nzSize="small" nz-button nzType="primary" (click)="enableProduct(product.id)"> 
+              Abilita
+            </button> 
+
+            <button *ngIf="!product.disabled" style="margin-left: 10px; margin-bottom: 6px;" nzSize="small" nz-button nzType="primary" (click)="disableProduct(product.id)"> 
               Disabilita
             </button> 
 
@@ -217,8 +221,18 @@
             </button> 
           </div>
 
-          <!-- tasti "Aggiungi al carrello" e "Rimuovi dal carrello" solo per USER -->
-          <div style="float: right" *ngIf="isUserLoggedIn"> 
+          <!-- tasti "Aggiungi/Rimuovi al carrello/lista desideri" solo per USER -->
+          <div style="float: right;" *ngIf="isUserLoggedIn"> 
+            <button class="green-button" *ngIf="!isInListaDesideri(product.id)" style="margin-left: 10px; margin-bottom: 6px;" nzSize="small" 
+              nz-button nzType="primary" (click)="aggiungiAllaListaDesideri(product.id)"> 
+              Aggiungi alla lista desideri
+            </button> 
+
+            <button *ngIf="isInListaDesideri(product.id)" style="margin-left: 10px; margin-bottom: 6px;" nzSize="small" 
+              nz-button nzType="primary" nzDanger (click)="rimuoviDallaListaDesideri(product.id)"> 
+              Rimuovi dalla lista desideri
+            </button> 
+
             <button class="green-button" *ngIf="!isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
               nz-button nzType="primary" (click)="aggiungiAlCarrello(product.id)"> 
               Aggiungi al carrello 

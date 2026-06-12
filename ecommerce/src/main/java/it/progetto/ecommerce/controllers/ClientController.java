@@ -2,11 +2,13 @@ package it.progetto.ecommerce.controllers;
 
 import it.progetto.ecommerce.model.dto.CarrelloProductDTO;
 import it.progetto.ecommerce.model.dto.CategoryDTO;
+import it.progetto.ecommerce.model.dto.ListaDesideriProductDTO;
 import it.progetto.ecommerce.model.entities.CarrelloProductEntity;
 import it.progetto.ecommerce.model.entities.UserDetailsEntity;
 import it.progetto.ecommerce.model.exceptions.DifferentUserException;
 import it.progetto.ecommerce.model.exceptions.ProductNotFoundException;
 import it.progetto.ecommerce.services.carrello.CarrelloService;
+import it.progetto.ecommerce.services.listaDesideri.ListaDesideriService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.util.List;
 public class ClientController {
 
     private final CarrelloService carrelloService;
+    private final ListaDesideriService listaDesideriService;
 
     @GetMapping("/carrello")
     public ResponseEntity<?> getCarrello() {
@@ -73,6 +76,53 @@ public class ClientController {
         //System.out.println(idProdottoCarrello + "  ---  " + quantity); //debug
         try {
             carrelloService.removeFromCarrello(idProdottoCarrello);
+            return new ResponseEntity<>(HttpStatus.OK); //stato 200
+        } catch(DifferentUserException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE); //stato 406
+        } catch (ProductNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    @GetMapping("/lista-desideri")
+    public ResponseEntity<?> getListaDesideri() {
+        List<ListaDesideriProductDTO> listaDesideriDTO = listaDesideriService.getListaDesideri();
+
+        if(listaDesideriDTO == null || listaDesideriDTO.isEmpty()){
+            return new ResponseEntity<>(new LinkedList<>(), HttpStatus.OK); //stato 200
+        }
+        else{
+            return new ResponseEntity<>(listaDesideriDTO, HttpStatus.OK); //stato 200
+        }
+    }
+
+    @PostMapping("/lista-desideri/add")
+    public ResponseEntity<?> addToListaDesideri(
+            @RequestParam long idProdotto
+    ) {
+        try {
+            listaDesideriService.addToListaDesideri(idProdotto);
+            return new ResponseEntity<>(HttpStatus.OK); //stato 200
+        } catch (ProductNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        }
+    }
+
+    @PostMapping("/lista-desideri/remove")
+    public ResponseEntity<?> removeFromListaDesideri(
+            @RequestParam long idProdottoListaDesideri
+    ) {
+        try {
+            listaDesideriService.removeFromListaDesideri(idProdottoListaDesideri);
             return new ResponseEntity<>(HttpStatus.OK); //stato 200
         } catch(DifferentUserException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE); //stato 406

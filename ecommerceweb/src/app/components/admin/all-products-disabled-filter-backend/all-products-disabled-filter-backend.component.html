@@ -118,7 +118,7 @@
 
   <!-- Messaggio quando non ci sono prodotti -->
   <div *ngIf="products.length === 0" class="no-products">
-    <h3 *ngIf="selectedCategory === -1">Nessun prodotto disponibile</h3>
+    <h3 *ngIf="selectedCategory === -1">Nessun prodotto disabilitato disponibile</h3>
     <h3 *ngIf="selectedCategory !== -1">Nessun prodotto nella categoria selezionata</h3>
     <p>Non ci sono prodotti da visualizzare al momento.</p>
     <button *ngIf="selectedCategory !== -1" nz-button nzType="primary" (click)="resetCategory()">

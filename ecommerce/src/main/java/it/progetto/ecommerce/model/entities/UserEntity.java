@@ -39,7 +39,10 @@ public class UserEntity {
     private byte[] profileImg;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<CarrelloProductEntity> orderItems;
+    private List<CarrelloProductEntity> carrelloProducts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ListaDesideriProductEntity> listaDesideriProducts;
 
     private String lastSearch;
 

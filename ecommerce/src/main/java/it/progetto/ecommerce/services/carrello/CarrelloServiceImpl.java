@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarrelloServiceImpl implements CarrelloService {
 
-    private final UserRepository userRepository;
     private final CarrelloProductRepository carrelloProductRepository;
     private final CarrelloProductMapper carrelloProductMapper;
     private final ProductRepository productRepository;

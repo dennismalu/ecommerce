@@ -29,15 +29,15 @@ interface ListaDesideriItem {
 }
 
 @Component({
-  selector: 'app-carrello',
-  templateUrl: './carrello.component.html',
-  styleUrls: ['./carrello.component.css']
+  selector: 'app-lista-desideri',
+  templateUrl: './lista-desideri.component.html',
+  styleUrl: './lista-desideri.component.css'
 })
-export class CarrelloComponent implements OnInit {
+export class ListaDesideriComponent {
   cartItems: CartItem[] = [];
   listaDesideriItems: ListaDesideriItem[] = [];
-  enabledItems: CartItem[] = [];
-  disabledItems: CartItem[] = [];
+  enabledItems: ListaDesideriItem[] = [];
+  disabledItems: ListaDesideriItem[] = [];
 
   isUserLoggedIn = false;
 
@@ -72,8 +72,6 @@ export class CarrelloComponent implements OnInit {
           id: it.id,
           quantity: it.quantity
         }));
-
-        this.splitEnabledDisabled();
       },
       error: (err) => {
         console.error('Errore caricamento carrello', err);
@@ -81,73 +79,6 @@ export class CarrelloComponent implements OnInit {
       }
     });
   }
-
-  private splitEnabledDisabled() {
-    this.enabledItems = this.cartItems.filter(ci => !ci.product.disabled);
-    this.disabledItems = this.cartItems.filter(ci => ci.product.disabled);
-  }
-
-
-  // funzioni per aumentare/diminuire quantità - valide SOLO per prodotti abilitati
-  aumentaQuantita(item: CartItem) {
-    if (item.product.disabled) return;
-    item.quantity = item.quantity + 1;
-    this.updateCartOnServer(item);
-  }
-
-  diminuisciQuantita(item: CartItem) {
-    if (item.product.disabled) return;
-    if (item.quantity > 1) {
-      item.quantity = item.quantity - 1;
-      this.updateCartOnServer(item);
-    }
-    else if(item.quantity == 1){
-      this.rimuoviDalCarrello(item)
-    }
-  }
-
-  private updateCartOnServer(item: CartItem) {
-    // aggiorna quantità sul server (se il tuo backend lo richiede)
-    //console.log(item.id, item.quantity) //debug
-    this.carrelloService.updateQuantity(item.id, item.quantity).subscribe({
-      next: () => {
-        // opzionale: messaggio piccolo o nessuno
-        this.loadCart();
-      },
-      error: (err) => {
-        console.error('Errore update cart', err);
-        this.dialogService.openErrorDialog('Errore', 'Impossibile aggiornare il carrello');
-        this.loadCart();
-      }
-    });
-  }
-
-  // rimuovo dal carrello (richiamata dal template)
-  rimuoviDalCarrello(item: CartItem) {
-    // chiamo il servizio per rimuovere l'elemento
-    this.carrelloService.removeFromCart(item.id).subscribe({
-      next: (res) => {
-        this.loadCart();
-        // aggiorno la vista localmente
-        //this.cartItems = this.cartItems.filter(ci => ci.product.id !== item.product.id);
-        //this.splitEnabledDisabled();
-        //this.dialogService.openSuccessDialog('Rimosso', 'Prodotto rimosso dal carrello');
-      },
-      error: (err) => {
-        console.error(err);
-        this.dialogService.openErrorDialog('Errore', 'Impossibile rimuovere il prodotto dal carrello');
-        this.loadCart();
-      }
-    });
-  }
-
-  //TODO
-  ordinaCarrello(){
-
-  }
-
-
-
 
   loadListaDesideri() {
     this.listaDesideriService.getListaDesideri().subscribe({
@@ -166,6 +97,8 @@ export class CarrelloComponent implements OnInit {
           },
           id: it.id
         }));
+
+        this.splitEnabledDisabled();
       },
       error: (err) => {
         console.error('Errore caricamento lista desideri', err);
@@ -174,50 +107,56 @@ export class CarrelloComponent implements OnInit {
     });
   }
 
-  // aggiungo alla lista desideri (richiamata dal template)
-  aggiungiAllaListaDesideri(idProdotto: number) {
+  private splitEnabledDisabled() {
+    this.enabledItems = this.listaDesideriItems.filter(ci => !ci.product.disabled);
+    this.disabledItems = this.listaDesideriItems.filter(ci => ci.product.disabled);
+  }
+
+
+  // aggiungo al carrello (richiamata dal template)
+  aggiungiAlCarrello(idProdotto: number) {
     // chiami il servizio per rimuovere l'elemento
-    this.listaDesideriService.addToListaDesideri(idProdotto).subscribe({
+    this.carrelloService.addToCart(idProdotto).subscribe({
       next: (res) => {
-        this.loadListaDesideri();
+        this.loadCart();
       },
       error: (err) => {
         console.error(err);
-        this.dialogService.openErrorDialog('Errore', 'Impossibile aggiungere il prodotto alla lista desideri');
-        this.loadListaDesideri();
+        this.dialogService.openErrorDialog('Errore', 'Impossibile aggiungere il prodotto dal carrello');
+        this.loadCart();
       }
     });
   }
 
 
   // rimuovo dal carrello (richiamata dal template)
-  rimuoviDallaListaDesideri(idProdotto: number) {
-    let listaDesideriItem: ListaDesideriItem|null = null;
-    for(const item of this.listaDesideriItems){
+  rimuoviDalCarrello(idProdotto: number) {
+    let cartItem: CartItem|null = null;
+    for(const item of this.cartItems){
       if(item.product.id == idProdotto){
-        listaDesideriItem = item;
+        cartItem = item;
         break;
       }
     }
     
-    if(listaDesideriItem != null){
+    if(cartItem != null){
       // chiamo il servizio per rimuovere l'elemento
-      this.listaDesideriService.removeFromListaDesideri(listaDesideriItem.id).subscribe({
+      this.carrelloService.removeFromCart(cartItem.id).subscribe({
         next: (res) => {
-          this.loadListaDesideri();
+          this.loadCart();
         },
         error: (err) => {
           console.error(err);
-          this.dialogService.openErrorDialog('Errore', 'Impossibile rimuovere il prodotto dalla lista desideri');
-          this.loadListaDesideri();
+          this.dialogService.openErrorDialog('Errore', 'Impossibile rimuovere il prodotto dal carrello');
+          this.loadCart();
         }
       });
     }
   }
 
-  //true se il prodotto è nella lista desideri
-  isInListaDesideri(productId: number): boolean {
-    for(const item of this.listaDesideriItems){
+  //true se il prodotto è nella carta
+  isInCart(productId: number): boolean {
+    for(const item of this.cartItems){
       if(item.product.id == productId){
         return true;
       }
@@ -225,9 +164,27 @@ export class CarrelloComponent implements OnInit {
 
     return false;
   }
-  
 
 
+  // rimuovo dal carrello (richiamata dal template)
+  rimuoviDallaListaDesideri(item: ListaDesideriItem) {
+    // chiamo il servizio per rimuovere l'elemento
+    this.listaDesideriService.removeFromListaDesideri(item.id).subscribe({
+      next: (res) => {
+        this.loadListaDesideri();
+      },
+      error: (err) => {
+        console.error(err);
+        this.dialogService.openErrorDialog('Errore', 'Impossibile rimuovere il prodotto dalla lista desideri');
+        this.loadListaDesideri();
+      }
+    });
+  }
+
+  //TODO
+  aggiungiTuttoAlCarrello(){
+
+  }
 
   // calcola il totale considerando SOLO i prodotti abilitati
   getTotal(): number {
@@ -236,8 +193,7 @@ export class CarrelloComponent implements OnInit {
     for (const ci of this.enabledItems) {
       // calcolo righe, attenzione a tipi stringa/numero
       const price = Number(ci.product.price) || 0;
-      const qty = Number(ci.quantity) || 0;
-      total += price * qty;
+      total += price;
     }
     // arrotondamento a 2 decimali
     return Math.round((total + Number.EPSILON) * 100) / 100;

@@ -2,10 +2,10 @@
 
   <!-- HEADER -->
   <div class="cart-header child" style="padding: 20px; margin-bottom: 18px;">
-    <h1>Il tuo carrello</h1>
+    <h1>La tua lista desideri</h1>
     <div *ngIf="enabledItems.length === 0 && disabledItems.length === 0" class="no-products">
-      <h3>Carrello vuoto</h3>
-      <p>Non hai ancora aggiunto prodotti al carrello.</p>
+      <h3>Lista desideri vuota</h3>
+      <p>Non hai ancora aggiunto prodotti alla lista desideri.</p>
     </div>
   </div>
 
@@ -30,38 +30,21 @@
 
           <hr />
 
-          <!-- Controllo quantità -->
-          <div style="display:flex; align-items:center; gap:10px; margin-top:12px;">
-            <button nz-button nzType="default" nzSize="small" (click)="diminuisciQuantita(item)">
-              -
-            </button>
-
-            <div style="min-width:48px; text-align:center; font-weight:600;">
-              {{ item.quantity }}
-            </div>
-
-            <button nz-button nzType="default" nzSize="small" (click)="aumentaQuantita(item)">
-              +
-            </button>
-          </div>
-
-          <hr />
-
-          <!-- Rimuovi dal carrello - Aggiungi/Rimuovi dalla lista desideri -->
+          <!-- Rimuovi dalla lista desideri - Aggiungi/Rimuovi dal carrello -->
           <div style="display:flex; flex-direction: column; align-items: center; gap:6px; margin-top:12px;">
-            <button *ngIf="!isInListaDesideri(item.product.id)" style="margin-left: 10px;" 
-              nzSize="small" nz-button nzType="primary" (click)="aggiungiAllaListaDesideri(item.product.id)"> 
-              Aggiungi alla lista desideri
+            <button nz-button nzType="primary" nzSize="small" nzDanger 
+                style="margin-left: 10px;" (click)="rimuoviDallaListaDesideri(item)">
+                Rimuovi dalla lista desideri
+            </button>
+            <button class="green-button" *ngIf="!isInCart(item.product.id)" style="margin-left: 10px;" 
+                nzSize="small" nz-button nzType="primary" (click)="aggiungiAlCarrello(item.product.id)"> 
+                Aggiungi al carrello 
             </button> 
 
-            <button *ngIf="isInListaDesideri(item.product.id)" style="margin-left: 10px;" nzSize="small" 
-              nz-button nzType="primary" nzDanger (click)="rimuoviDallaListaDesideri(item.product.id)"> 
-              Rimuovi dalla lista desideri
+            <button *ngIf="isInCart(item.product.id)" style="margin-left: 10px;" 
+                nzSize="small" nz-button nzType="primary" nzDanger (click)="rimuoviDalCarrello(item.product.id)"> 
+                Rimuovi dal carrello
             </button> 
-            <button nz-button nzType="primary" nzSize="small" style="margin-left: 10px;"
-              nzDanger (click)="rimuoviDalCarrello(item)">
-              Rimuovi dal carrello
-            </button>
           </div>
 
         </div>
@@ -70,13 +53,13 @@
   </div>
 
   <!-- Totale (solo abilitati) -->
-  <div *ngIf="enabledItems.length > 0" class="child" style="display:flex; flex-direction: column; align-items:center; justify-content:end; gap: 10px;">
-    <h3>Totale ordine</h3>
+  <div *ngIf="enabledItems.length > 0" class="child" style="display:flex; flex-direction: column; align-items:center; justify-content:end; gap: 6px;">
+    <h3>Totale lista desideri</h3>
     <p style="font-size:22px; font-weight:700; color:var(--titoli, #1890ff);">
       {{ getTotal() }}€
     </p>
-    <button class="green-button" nzSize="large" nz-button nzType="primary" (click)="ordinaCarrello()"> 
-      Procedi al pagamento 
+    <button class="green-button" nzSize="large" nz-button nzType="primary" (click)="aggiungiTuttoAlCarrello()"> 
+      Aggiungi al carrello
     </button> 
   </div>
 
@@ -105,22 +88,17 @@
             <hr />
 
             <div style="display:flex; flex-direction: column; align-items: center; gap:6px; margin-top:12px;">
-              <button *ngIf="!isInListaDesideri(item.product.id)" style="margin-left: 10px;" 
-                nzSize="small" nz-button nzType="primary" (click)="aggiungiAllaListaDesideri(item.product.id)"> 
-                Aggiungi alla lista desideri
-              </button> 
+                <button nz-button nzType="primary" nzSize="small" nzDanger 
+                    style="margin-left: 10px;" (click)="rimuoviDallaListaDesideri(item)">
+                    Rimuovi dalla lista desideri
+                </button>
 
-              <button *ngIf="isInListaDesideri(item.product.id)" style="margin-left: 10px;" 
-                nzSize="small" nz-button nzType="primary" nzDanger (click)="rimuoviDallaListaDesideri(item.product.id)"> 
-                Rimuovi dalla lista desideri
-              </button> 
-
-              <button nz-button nzType="primary" nzSize="small" style="margin-left: 10px;"
-                nzDanger (click)="rimuoviDalCarrello(item)">
-                Rimuovi dal carrello
-              </button>
+                <button *ngIf="isInCart(item.product.id)" style="margin-left: 10px;" 
+                    nzSize="small" nz-button nzType="primary" nzDanger (click)="rimuoviDalCarrello(item.product.id)"> 
+                    Rimuovi dal carrello
+                </button> 
             </div>
-            
+
           </div>
         </nz-row>
       </div>

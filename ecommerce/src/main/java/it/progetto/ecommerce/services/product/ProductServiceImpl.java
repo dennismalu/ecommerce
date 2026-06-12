@@ -4,15 +4,21 @@ import it.progetto.ecommerce.model.dto.ProductDTO;
 import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
 import it.progetto.ecommerce.model.entities.CategoryEntity;
 import it.progetto.ecommerce.model.entities.ProductEntity;
+import it.progetto.ecommerce.model.entities.UserDetailsEntity;
+import it.progetto.ecommerce.model.entities.UserEntity;
+import it.progetto.ecommerce.model.enums.UserRole;
 import it.progetto.ecommerce.model.mapper.ProductMapper;
 import it.progetto.ecommerce.repository.CategoryRepository;
 import it.progetto.ecommerce.repository.ProductRepository;
+import it.progetto.ecommerce.repository.UserRepository;
 import it.progetto.ecommerce.utils.ProductUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -26,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<ProductDTO> getAllProductsDTO() {
@@ -72,30 +79,34 @@ public class ProductServiceImpl implements ProductService {
 
     //prodotti abilitati o tutti (abilitati e disabilitati insieme)
     @Override
-    public PageEntityResponseDTO<ProductDTO> searchProductsByNameFilteredSortered(boolean withDisabled, int page, int size, int sort, long category, String name) {
-        Sort sortConfig = ProductUtils.setSortConfig(sort);
+    public PageEntityResponseDTO<ProductDTO> searchProductsByNameFilteredSortered(boolean withDisabled, int page, int size, int sort, long category, String search) {
+        //se la richiesta è stata fatta da un utente loggato aggiorno la sua ultima ricerca
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth!=null && auth.getPrincipal() instanceof UserDetailsEntity userDetailsEntity) { //copre auth!=null
+            userDetailsEntity = (UserDetailsEntity) auth.getPrincipal();
+            if(userDetailsEntity!=null && userDetailsEntity.getRole().equals(UserRole.USER)){
+                userRepository.updateLastSearchById(userDetailsEntity.getId(), search);
+            }
+        }
 
+        Sort sortConfig = ProductUtils.setSortConfig(sort);
         Pageable pageable = PageRequest.of(page, size, sortConfig);
         Page<ProductEntity> prodottiPage;
         if (category == -1) {
             // tutte le categorie (all)
-            if(withDisabled){
-                //se withDisabled == true --> tutti i prodotti (abilitati e disabilitati)
-                prodottiPage = productRepository.findAllByNameContainingIgnoreCase(name, pageable);
+            if(withDisabled){ //se withDisabled == true --> tutti i prodotti (abilitati e disabilitati)
+                prodottiPage = productRepository.findAllByNameContainingIgnoreCase(search, pageable);
             }
-            else{
-                //se withDisabled == false --> solo prodotti non disabilitati
-                prodottiPage = productRepository.findAllByNameContainingIgnoreCaseAndDisabled(name, false, pageable);
+            else{ //se withDisabled == false --> solo prodotti non disabilitati
+                prodottiPage = productRepository.findAllByNameContainingIgnoreCaseAndDisabled(search, false, pageable);
             }
         }
         else {
-            if(withDisabled){
-                //se withDisabled == true --> tutti i prodotti (abilitati e disabilitati)
-                prodottiPage = productRepository.findAllByNameContainingIgnoreCaseAndCategory_Id(name, category, pageable);
+            if(withDisabled){ //se withDisabled == true --> tutti i prodotti (abilitati e disabilitati)
+                prodottiPage = productRepository.findAllByNameContainingIgnoreCaseAndCategory_Id(search, category, pageable);
             }
-            else{
-                //se withDisabled == false --> solo prodotti non disabilitati
-                prodottiPage = productRepository.findAllByNameContainingIgnoreCaseAndCategory_IdAndDisabled(name, category, false, pageable);
+            else{ //se withDisabled == false --> solo prodotti non disabilitati
+                prodottiPage = productRepository.findAllByNameContainingIgnoreCaseAndCategory_IdAndDisabled(search, category, false, pageable);
             }
         }
         List<ProductEntity> prodotti = prodottiPage.getContent();

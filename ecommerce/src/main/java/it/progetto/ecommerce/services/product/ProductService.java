@@ -10,7 +10,7 @@ public interface ProductService {
     List<ProductDTO> getAllProductsDTO();
     PageEntityResponseDTO<ProductDTO> getAllProductsDTOFilteredSortered(boolean disabled, int page, int size, int sort, long category);
     boolean hasProductWithName(String name);
-    PageEntityResponseDTO<ProductDTO> searchProductsByNameFilteredSortered(boolean withDisabled, int page, int size, int sort, long category, String name);
+    PageEntityResponseDTO<ProductDTO> searchProductsByNameFilteredSortered(boolean withDisabled, int page, int size, int sort, long category, String search);
     ProductEntity createProduct(ProductDTO productDTO);
     ProductDTO getProduct(Long id);
     ProductEntity updateProduct(ProductDTO productDTO);

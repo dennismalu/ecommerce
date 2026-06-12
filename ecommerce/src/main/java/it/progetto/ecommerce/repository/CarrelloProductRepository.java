@@ -11,7 +11,6 @@ import java.util.List;
 public interface CarrelloProductRepository extends JpaRepository<CarrelloProductEntity, Long> {
 
     CarrelloProductEntity findFirstById(Long id);
-    //List<CarrelloProductEntity> getAllByUser_Id(Long id);
     List<CarrelloProductEntity> getAllByUser_IdOrderByProduct_Name(Long id);
 
 }
