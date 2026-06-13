@@ -5,15 +5,13 @@ import it.progetto.ecommerce.model.entities.CarrelloProductEntity;
 import it.progetto.ecommerce.model.entities.ProductEntity;
 import it.progetto.ecommerce.model.entities.UserDetailsEntity;
 import it.progetto.ecommerce.model.entities.UserEntity;
-import it.progetto.ecommerce.model.exceptions.DifferentUserException;
-import it.progetto.ecommerce.model.exceptions.ProductNotFoundException;
+import it.progetto.ecommerce.model.exceptions.CustomExceptionBuilder;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.model.mapper.CarrelloProductMapper;
 import it.progetto.ecommerce.model.mapper.UserMapper;
 import it.progetto.ecommerce.repository.CarrelloProductRepository;
 import it.progetto.ecommerce.repository.ProductRepository;
-import it.progetto.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -45,10 +43,10 @@ public class CarrelloServiceImpl implements CarrelloService {
     }
 
     @Override
-    public void addToCarrello(long idProdotto) throws ProductNotFoundException {
+    public void addToCarrello(long idProdotto) throws CustomException {
         ProductEntity productEntity = productRepository.findFirstById(idProdotto);
         if(productEntity == null) {
-            throw new ProductNotFoundException();
+            throw CustomExceptionBuilder.productNotFound(); //errore 404
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -60,42 +58,54 @@ public class CarrelloServiceImpl implements CarrelloService {
         carrelloProductEntity.setUser(userEntity);
         carrelloProductEntity.setProduct(productEntity);
 
-        carrelloProductRepository.save(carrelloProductEntity);
+        try {
+            carrelloProductRepository.save(carrelloProductEntity);
+        } catch(Exception e){
+            throw CustomExceptionBuilder.productNotAddedToCart();
+        }
     }
 
     @Override
-    public void updateCarrello(long idProdottoCarrello, int quantity) throws DifferentUserException, ProductNotFoundException {
+    public void updateCarrello(long idProdottoCarrello, int quantity) throws CustomException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsEntity userDetailsEntity = (UserDetailsEntity) auth.getPrincipal();
 
         CarrelloProductEntity carrelloProductEntity = carrelloProductRepository.findFirstById(idProdottoCarrello);
 
         if(carrelloProductEntity == null) {
-            throw new ProductNotFoundException();
+            throw CustomExceptionBuilder.productNotFound(); //errore 404
         }
         else if(!carrelloProductEntity.getUser().getId().equals(userDetailsEntity.getId())) {
-            throw new DifferentUserException();
+            throw CustomExceptionBuilder.userNotAllowed(); //errore 405
         }
 
         carrelloProductEntity.setQuantity(quantity);
-        carrelloProductRepository.save(carrelloProductEntity);
+        try {
+            carrelloProductRepository.save(carrelloProductEntity);
+        } catch(Exception e){
+            throw CustomExceptionBuilder.cartNotUpdated(); //errore 500
+        }
     }
 
     @Override
-    public void removeFromCarrello(long idProdottoCarrello) throws DifferentUserException, ProductNotFoundException {
+    public void removeFromCarrello(long idProdottoCarrello) throws CustomException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsEntity userDetailsEntity = (UserDetailsEntity) auth.getPrincipal();
 
         CarrelloProductEntity carrelloProductEntity = carrelloProductRepository.findFirstById(idProdottoCarrello);
 
         if(carrelloProductEntity == null) {
-            throw new ProductNotFoundException();
+            throw CustomExceptionBuilder.productNotFound(); //errore 404
         }
         else if(!carrelloProductEntity.getUser().getId().equals(userDetailsEntity.getId())) {
-            throw new DifferentUserException();
+            throw CustomExceptionBuilder.userNotAllowed(); //errore 405
         }
 
-        carrelloProductRepository.delete(carrelloProductEntity);
+        try {
+            carrelloProductRepository.delete(carrelloProductEntity);
+        } catch(Exception e){
+            throw CustomExceptionBuilder.productNotRemovedFromCart(); //errore 500
+        }
     }
 
 }

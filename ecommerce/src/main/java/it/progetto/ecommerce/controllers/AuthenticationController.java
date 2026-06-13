@@ -51,8 +51,6 @@ public class AuthenticationController {
 
             //username e password sono corretti
             UserDetailsEntity userDetails = (UserDetailsEntity) authentication.getPrincipal();
-            //UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequestDTO.getEmail());
-            //UserEntity user = userRepository.findFirstByEmail(userDetails.getUsername());
             String jwtToken = jwtService.generateToken(userDetails.getEmail());
 
             return new ResponseEntity<>(new AuthenticationResponseDTO(jwtToken, userDetails.getName(), userDetails.getRole()), HttpStatus.OK); //stato 200
@@ -61,9 +59,9 @@ public class AuthenticationController {
         catch(UsernameNotFoundException | BadCredentialsException e){
             return new ResponseEntity<>("Username o password non validi!", HttpStatus.UNAUTHORIZED); //stato 401 (errore di login o utente non registrato)
         }
-        catch(DisabledException disabledException){
-            return new ResponseEntity<>("L'utente non è attivato", HttpStatus.NOT_ACCEPTABLE); //stato 406
-        }
+//        catch(DisabledException disabledException){ //non gestito nell'ecommerce
+//            return new ResponseEntity<>("L'utente non è attivato", HttpStatus.NOT_ACCEPTABLE); //stato 406
+//        }
     }
 
 
@@ -71,9 +69,6 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUpUser(@RequestBody SignUpDTO signUpDTO){
-        if(userService.hasUserWithEmail(signUpDTO.getEmail())){
-            return new ResponseEntity<>("Utente già registrato", HttpStatus.NOT_ACCEPTABLE); //stato 406
-        }
         UserEntity createdUser = userService.createUser(signUpDTO);
         if(createdUser == null){
             return new ResponseEntity<>("Utente non creato!", HttpStatus.BAD_REQUEST); //stato 400

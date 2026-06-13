@@ -2,8 +2,8 @@ package it.progetto.ecommerce.services.listaDesideri;
 
 import it.progetto.ecommerce.model.dto.ListaDesideriProductDTO;
 import it.progetto.ecommerce.model.entities.*;
-import it.progetto.ecommerce.model.exceptions.DifferentUserException;
-import it.progetto.ecommerce.model.exceptions.ProductNotFoundException;
+import it.progetto.ecommerce.model.exceptions.CustomExceptionBuilder;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.model.mapper.ListaDesideriProductMapper;
 import it.progetto.ecommerce.model.mapper.UserMapper;
 import it.progetto.ecommerce.repository.ListaDesideriProductRepository;
@@ -40,10 +40,10 @@ public class ListaDesideriServiceImpl implements ListaDesideriService {
     }
 
     @Override
-    public void addToListaDesideri(long idProdotto) throws ProductNotFoundException {
+    public void addToListaDesideri(long idProdotto) throws CustomException {
         ProductEntity productEntity = productRepository.findFirstById(idProdotto);
         if(productEntity == null) {
-            throw new ProductNotFoundException();
+            throw CustomExceptionBuilder.productNotFound(); //errore 404
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -53,23 +53,34 @@ public class ListaDesideriServiceImpl implements ListaDesideriService {
         ListaDesideriProductEntity listaDesideriProductEntity = new ListaDesideriProductEntity();
         listaDesideriProductEntity.setUser(userEntity);
         listaDesideriProductEntity.setProduct(productEntity);
-        listaDesideriProductRepository.save(listaDesideriProductEntity);
+        try {
+            listaDesideriProductRepository.save(listaDesideriProductEntity);
+        } catch(Exception e) {
+            throw CustomExceptionBuilder.productNotAddedToListaDesideri(); //errore 500
+        }
     }
 
     @Override
-    public void removeFromListaDesideri(long idProdottoListaDesideri) throws DifferentUserException, ProductNotFoundException {
+    public void removeFromListaDesideri(long idProdottoListaDesideri) throws CustomException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsEntity userDetailsEntity = (UserDetailsEntity) auth.getPrincipal();
 
         ListaDesideriProductEntity listaDesideriProductEntity = listaDesideriProductRepository.findFirstById(idProdottoListaDesideri);
 
         if(listaDesideriProductEntity == null) {
-            throw new ProductNotFoundException();
+            throw CustomExceptionBuilder.productNotFound(); //errore 404
         }
         else if(!listaDesideriProductEntity.getUser().getId().equals(userDetailsEntity.getId())) {
-            throw new DifferentUserException();
+            throw CustomExceptionBuilder.userNotAllowed(); //errore 405
         }
 
-        listaDesideriProductRepository.delete(listaDesideriProductEntity);
+        try {
+            listaDesideriProductRepository.delete(listaDesideriProductEntity);
+        } catch(Exception e) {
+            throw CustomExceptionBuilder.productNotRemovedFromListaDesideri(); //errore 500
+        }
     }
+
 }
+
+

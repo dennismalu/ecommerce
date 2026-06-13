@@ -194,7 +194,7 @@
 
           <!-- tasti "Aggiungi/Rimuovi al carrello/lista desideri" solo per USER -->
           <div style="float: right;" *ngIf="isUserLoggedIn"> 
-            <button *ngIf="!isInListaDesideri(product.id)" style="margin-left: 10px; margin-bottom: 6px;" nzSize="small" 
+            <button class="aggiungi-lista-desideri-button" *ngIf="!isInListaDesideri(product.id)" style="margin-left: 10px; margin-bottom: 6px;" nzSize="small" 
               nz-button nzType="primary" (click)="aggiungiAllaListaDesideri(product.id)"> 
               Aggiungi alla lista desideri
             </button> 
@@ -204,7 +204,7 @@
               Rimuovi dalla lista desideri
             </button> 
 
-            <button class="green-button" *ngIf="!isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
+            <button class="aggiungi-carrello-button" *ngIf="!isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
               nz-button nzType="primary" (click)="aggiungiAlCarrello(product.id)"> 
               Aggiungi al carrello 
             </button> 
@@ -217,7 +217,7 @@
 
           <!-- tasto "Aggiungi al carrello" con messaggio di errore per utenti non loggati -->
           <div style="float: right" *ngIf="!isAdminLoggedIn && !isUserLoggedIn"> 
-            <button class="green-button" *ngIf="!isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
+            <button class="aggiungi-carrello-button" *ngIf="!isInCart(product.id)" style="margin-left: 10px" nzSize="small" 
               nz-button nzType="primary" (click)="erroreUtenteNonLoggato()"> 
               Aggiungi al carrello 
             </button> 

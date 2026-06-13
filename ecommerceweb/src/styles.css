@@ -26,3 +26,29 @@ body {
   --colorStatusValue: #fa541c;
 }
 
+
+
+
+
+.aggiungi-carrello-button{
+  color: white; 
+  background-color: green;
+}
+
+.aggiungi-carrello-button:hover{
+  color: white; 
+  background-color: rgb(22, 168, 22);
+}
+
+
+.aggiungi-lista-desideri-button{
+  color: white; 
+  background-color: rgb(87, 27, 122);
+}
+
+.aggiungi-lista-desideri-button:hover{
+  color: white; 
+  background-color: rgb(148, 16, 224);
+}
+
+

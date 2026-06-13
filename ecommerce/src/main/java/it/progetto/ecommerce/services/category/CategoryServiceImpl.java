@@ -2,6 +2,7 @@ package it.progetto.ecommerce.services.category;
 
 import it.progetto.ecommerce.model.dto.CategoryDTO;
 import it.progetto.ecommerce.model.entities.CategoryEntity;
+import it.progetto.ecommerce.model.exceptions.CustomExceptionBuilder;
 import it.progetto.ecommerce.model.mapper.CategoryMapper;
 import it.progetto.ecommerce.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryEntity createCategory(CategoryDTO categoryDTO) {
+        if(hasCategoryWithName(categoryDTO.getName())){
+            throw CustomExceptionBuilder.categoryAlreadyExists(); //stato 409
+        }
         CategoryEntity category = new CategoryEntity();
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
-        return categoryRepository.save(category);
+        try {
+            return categoryRepository.save(category);
+        } catch(Exception e){
+            throw CustomExceptionBuilder.categoryNotCreated();
+        }
     }
 
 

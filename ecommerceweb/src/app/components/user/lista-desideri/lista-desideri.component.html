@@ -36,7 +36,7 @@
                 style="margin-left: 10px;" (click)="rimuoviDallaListaDesideri(item)">
                 Rimuovi dalla lista desideri
             </button>
-            <button class="green-button" *ngIf="!isInCart(item.product.id)" style="margin-left: 10px;" 
+            <button class="aggiungi-carrello-button" *ngIf="!isInCart(item.product.id)" style="margin-left: 10px;" 
                 nzSize="small" nz-button nzType="primary" (click)="aggiungiAlCarrello(item.product.id)"> 
                 Aggiungi al carrello 
             </button> 
@@ -58,7 +58,7 @@
     <p style="font-size:22px; font-weight:700; color:var(--titoli, #1890ff);">
       {{ getTotal() }}€
     </p>
-    <button class="green-button" nzSize="large" nz-button nzType="primary" (click)="aggiungiTuttoAlCarrello()"> 
+    <button class="aggiungi-carrello-button" nzSize="large" nz-button nzType="primary" (click)="aggiungiTuttoAlCarrello()"> 
       Aggiungi al carrello
     </button> 
   </div>

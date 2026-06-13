@@ -44,7 +44,7 @@ export class RegisterComponent {
         //ha un problema: accetta email del tipo utente@gmail (anche senza .com) --> ho preferito la regex
       password: ["", [
         Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)   ]],
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!/@#$%^&*(),.?+\-":{}|<>]).{8,}$/)   ]],
       confirmPassword: ["", [Validators.required]]
     },
     { validators: this.confirmationvalidator }  );

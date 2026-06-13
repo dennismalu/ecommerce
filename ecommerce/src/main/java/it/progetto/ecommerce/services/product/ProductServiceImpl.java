@@ -5,8 +5,9 @@ import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
 import it.progetto.ecommerce.model.entities.CategoryEntity;
 import it.progetto.ecommerce.model.entities.ProductEntity;
 import it.progetto.ecommerce.model.entities.UserDetailsEntity;
-import it.progetto.ecommerce.model.entities.UserEntity;
 import it.progetto.ecommerce.model.enums.UserRole;
+import it.progetto.ecommerce.model.exceptions.CustomExceptionBuilder;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.model.mapper.ProductMapper;
 import it.progetto.ecommerce.repository.CategoryRepository;
 import it.progetto.ecommerce.repository.ProductRepository;
@@ -122,37 +123,47 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductEntity createProduct(ProductDTO productDTO) {
+    public ProductEntity createProduct(ProductDTO productDTO) throws CustomException {
+        if(hasProductWithName(productDTO.getName())){
+            throw CustomExceptionBuilder.productAlreadyExists(); //errore 409
+        }
+
         CategoryEntity category = categoryRepository.findFirstById(productDTO.getCategoryId());
-        if(category != null) {
-            ProductEntity product = new ProductEntity();
-            product.setName(productDTO.getName());
-            product.setDescription(productDTO.getDescription());
-            product.setPrice(productDTO.getPrice());
-            product.setDisabled(false); //un prodotto appena creato non può avere disabled=true
-            product.setImage(productDTO.getImage());
-            product.setCategory(category);
+        if(category == null){
+            throw CustomExceptionBuilder.categoryNotFound(); //errore 404
+        }
+        ProductEntity product = new ProductEntity();
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setDisabled(false); //un prodotto appena creato non può avere disabled=true
+        product.setImage(productDTO.getImage());
+        product.setCategory(category);
+        try {
             return productRepository.save(product);
+        } catch (Exception e){
+            throw CustomExceptionBuilder.productNotCreated(); //errore 500
         }
-        return null;
     }
 
     @Override
-    public ProductDTO getProduct(Long id) {
+    public ProductDTO getProduct(Long id) throws CustomException {
         ProductEntity product = productRepository.findFirstById(id);
-        if(product != null) {
-            return productMapper.toDto(product);
+        if(product == null){
+            throw CustomExceptionBuilder.productNotFound(); //errore 404
         }
-        return null;
+        return productMapper.toDto(product);
     }
 
     @Override
-    public ProductEntity updateProduct(ProductDTO productDTO) {
-        //System.out.println(productDTO.toString()); //debug
+    public ProductEntity updateProduct(ProductDTO productDTO) throws CustomException {
         ProductEntity product = productRepository.findFirstById(productDTO.getId());
         CategoryEntity category = categoryRepository.findFirstById(productDTO.getCategoryId());
-        if(product == null || category == null) {
-            return null;
+        if(product == null) {
+            throw CustomExceptionBuilder.productNotFound();
+        }
+        else if(category == null){
+            throw CustomExceptionBuilder.categoryNotFound();
         }
         product.setCategory(category);
         product.setName(productDTO.getName());
@@ -167,38 +178,53 @@ public class ProductServiceImpl implements ProductService {
         else{
             product.setImage(null);
         }
-        return productRepository.save(product);
-    }
-
-    @Override
-    public boolean disableProduct(Long id) {
-        ProductEntity product = productRepository.findFirstById(id);
-        if(product != null) {
-            product.setDisabled(true);
-            productRepository.save(product);
-            return true;
+        try {
+            return productRepository.save(product);
+        } catch (Exception e){
+            throw CustomExceptionBuilder.productNotUpdated(); //errore 500
         }
-        return false;
     }
 
     @Override
-    public boolean enableProduct(Long id) {
+    public void disableProduct(Long id) throws CustomException {
         ProductEntity product = productRepository.findFirstById(id);
-        if(product != null) {
-            product.setDisabled(false);
-            productRepository.save(product);
-            return true;
+        if(product == null){
+            throw CustomExceptionBuilder.productNotFound();
         }
-        return false;
+        product.setDisabled(true);
+        try {
+            productRepository.save(product);
+        } catch(Exception e) {
+            throw CustomExceptionBuilder.productNotDisabled(); //errore 500
+        }
     }
 
     @Override
-    public boolean deleteProduct(Long id) {
+    public void enableProduct(Long id) throws CustomException {
         ProductEntity product = productRepository.findFirstById(id);
-        if(product != null) {
+        if(product == null){
+            throw CustomExceptionBuilder.productNotFound();
+        }
+        product.setDisabled(false);
+        try {
+            productRepository.save(product);
+        } catch(Exception e) {
+            throw CustomExceptionBuilder.productNotEnabled(); //errore 500
+        }
+    }
+
+    @Override
+    public void deleteProduct(Long id) throws CustomException {
+        ProductEntity product = productRepository.findFirstById(id);
+        if(product == null){
+            throw CustomExceptionBuilder.productNotFound();
+        }
+        try{
             productRepository.delete(product);
-            return true;
+        } catch(Exception e) {
+            throw CustomExceptionBuilder.productNotDeleted(); //errore 500
         }
-        return false;
     }
+
 }
+

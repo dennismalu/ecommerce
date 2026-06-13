@@ -3,6 +3,8 @@ package it.progetto.ecommerce.services.user;
 import it.progetto.ecommerce.model.dto.SignUpDTO;
 import it.progetto.ecommerce.model.entities.UserEntity;
 import it.progetto.ecommerce.model.enums.UserRole;
+import it.progetto.ecommerce.model.exceptions.CustomExceptionBuilder;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +49,16 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserEntity createUser(SignUpDTO signUpDTO) {
+    public boolean hasUserWithEmail(String email) {
+        return userRepository.findFirstByEmail(email) != null;
+    }
+
+
+    @Override
+    public UserEntity createUser(SignUpDTO signUpDTO) throws CustomException {
+        if(hasUserWithEmail(signUpDTO.getEmail())){
+            throw CustomExceptionBuilder.userAlreadyRegistered(); //stato 409
+        }
         UserEntity user = new UserEntity();
         user.setName(signUpDTO.getName());
         user.setEmail(signUpDTO.getEmail());
@@ -56,13 +67,11 @@ public class UserServiceImpl implements UserService {
         user.setCarrelloProducts(new LinkedList<>());
         user.setListaDesideriProducts(new LinkedList<>());
         user.setLastSearch(null);
-        return userRepository.save(user); //salva nel DB
-    }
-
-
-    @Override
-    public boolean hasUserWithEmail(String email) {
-        return userRepository.findFirstByEmail(email) != null;
+        try {
+            return userRepository.save(user); //salva nel DB
+        } catch (Exception e) {
+            throw CustomExceptionBuilder.userNotCreated(); //stato 500
+        }
     }
 
 

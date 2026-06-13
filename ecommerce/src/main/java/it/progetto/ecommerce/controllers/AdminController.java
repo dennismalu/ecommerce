@@ -5,6 +5,7 @@ import it.progetto.ecommerce.model.dto.ProductDTO;
 import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
 import it.progetto.ecommerce.model.entities.CategoryEntity;
 import it.progetto.ecommerce.model.entities.ProductEntity;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.model.mapper.CategoryMapper;
 import it.progetto.ecommerce.model.mapper.ProductMapper;
 import it.progetto.ecommerce.repository.CategoryRepository;
@@ -12,6 +13,7 @@ import it.progetto.ecommerce.services.category.CategoryService;
 import it.progetto.ecommerce.services.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,15 +34,13 @@ public class AdminController  {
 
     @PostMapping("/category")
     public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO) {
-        if(categoryService.hasCategoryWithName(categoryDTO.getName())){
-            return new ResponseEntity<>("Categoria già esistente", HttpStatus.NOT_ACCEPTABLE); //stato 406
+        try {
+            CategoryEntity createdCategory = categoryService.createCategory(categoryDTO);
+            CategoryDTO createdCategoryDTO = categoryMapper.toDto(createdCategory);
+            return new ResponseEntity<>(createdCategoryDTO, HttpStatus.CREATED); //stato 201
+        } catch (CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(e.getStatusCode()));
         }
-        CategoryEntity createdCategory = categoryService.createCategory(categoryDTO);
-        if(createdCategory == null){
-            return new ResponseEntity<>("Categoria non creata!", HttpStatus.BAD_REQUEST); //stato 400
-        }
-        CategoryDTO createdCategoryDTO = categoryMapper.toDto(createdCategory);
-        return new ResponseEntity<>(createdCategoryDTO, HttpStatus.CREATED); //stato 201
     }
 
     //SOLO prodotti disabilitati
@@ -114,49 +114,55 @@ public class AdminController  {
 
     @PostMapping("/product")
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
-        if(productService.hasProductWithName(productDTO.getName())){
-            return new ResponseEntity<>("Prodotto già esistente", HttpStatus.NOT_ACCEPTABLE); //stato 406
+        try {
+            ProductEntity createdProduct = productService.createProduct(productDTO);
+            ProductDTO createdProductDTO = productMapper.toDto(createdProduct);
+            return new ResponseEntity<>(createdProductDTO, HttpStatus.CREATED); //stato 201
+        } catch(CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(e.getStatusCode()));
         }
-        ProductEntity createdProduct = productService.createProduct(productDTO);
-        if(createdProduct == null){
-            return new ResponseEntity<>("Prodotto non inserito!", HttpStatus.BAD_REQUEST); //stato 400
-        }
-        ProductDTO createdProductDTO = productMapper.toDto(createdProduct);
-        return new ResponseEntity<>(createdProductDTO, HttpStatus.CREATED); //stato 201
     }
 
     @PutMapping("/product")
     public ResponseEntity<?> updateProduct(@RequestBody ProductDTO productDTO) {
-        ProductEntity updatedProduct = productService.updateProduct(productDTO);
-        if(updatedProduct == null){
-            return new ResponseEntity<>("Errore nella modifica del prodotto!", HttpStatus.UNPROCESSABLE_ENTITY); //stato 422
+        try {
+            ProductEntity updatedProduct = productService.updateProduct(productDTO);
+            ProductDTO updatedProductDTO = productMapper.toDto(updatedProduct);
+            return new ResponseEntity<>(updatedProductDTO, HttpStatus.CREATED); //stato 201
+        } catch (CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(e.getStatusCode()));
         }
-        ProductDTO updatedProductDTO = productMapper.toDto(updatedProduct);
-        return new ResponseEntity<>(updatedProductDTO, HttpStatus.CREATED); //stato 201
+
     }
 
     @PutMapping("/product/{id}/disable")
     public ResponseEntity<?> disableProduct(@PathVariable Long id) {
-        if(productService.disableProduct(id)){
+        try {
+            productService.disableProduct(id);
             return new ResponseEntity<>("", HttpStatus.OK); //stato 200
+        } catch (CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(e.getStatusCode()));
         }
-        return new ResponseEntity<>("Il prodotto che stai cercando di disabilitare non esiste!", HttpStatus.NOT_FOUND); //stato 404
     }
 
     @PutMapping("/product/{id}/enable")
     public ResponseEntity<?> enableProduct(@PathVariable Long id) {
-        if(productService.enableProduct(id)){
+        try {
+            productService.enableProduct(id);
             return new ResponseEntity<>("", HttpStatus.OK); //stato 200
+        } catch (CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(e.getStatusCode()));
         }
-        return new ResponseEntity<>("Il prodotto che stai cercando di abilitare non esiste!", HttpStatus.NOT_FOUND); //stato 404
     }
 
     @DeleteMapping("/product/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
-        if(productService.deleteProduct(id)){
+        try {
+            productService.deleteProduct(id);
             return new ResponseEntity<>("", HttpStatus.OK); //stato 200
+        } catch (CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(e.getStatusCode()));
         }
-        return new ResponseEntity<>("Il prodotto che stai cercando di eliminare non esiste!", HttpStatus.NOT_FOUND); //stato 404
     }
 
 }

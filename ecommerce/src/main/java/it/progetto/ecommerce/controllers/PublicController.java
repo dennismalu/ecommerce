@@ -3,6 +3,7 @@ package it.progetto.ecommerce.controllers;
 import it.progetto.ecommerce.model.dto.CategoryDTO;
 import it.progetto.ecommerce.model.dto.ProductDTO;
 import it.progetto.ecommerce.model.dto.pagedResponses.PageEntityResponseDTO;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.model.mapper.CategoryMapper;
 import it.progetto.ecommerce.model.mapper.ProductMapper;
 import it.progetto.ecommerce.repository.CategoryRepository;
@@ -28,11 +29,6 @@ public class PublicController {
 
     @GetMapping("/categories")
     public ResponseEntity<?> getAllCategories() {
-
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetailsEntity userDetailsEntity = (UserDetailsEntity) auth.getPrincipal();
-//        System.out.println(userDetailsEntity);
-
         List<CategoryDTO> categories = categoryService.getAllCategoriesDTO();
         if(categories == null || categories.isEmpty()){
             return new ResponseEntity<>(new LinkedList<>(), HttpStatus.OK); //stato 200
@@ -118,11 +114,12 @@ public class PublicController {
 
     @GetMapping("/product/{id}")
     public ResponseEntity<?> getProduct(@PathVariable Long id) {
-        ProductDTO productDTO = productService.getProduct(id);
-        if(productDTO != null){
+        try {
+            ProductDTO productDTO = productService.getProduct(id);
             return new ResponseEntity<>(productDTO, HttpStatus.OK); //stato 200
+        } catch (CustomException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
         }
-        return new ResponseEntity<>("Il prodotto che stai cercando non esiste!", HttpStatus.NOT_FOUND); //stato 404
     }
 
 }

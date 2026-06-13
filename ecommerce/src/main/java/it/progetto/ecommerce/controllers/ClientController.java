@@ -1,20 +1,14 @@
 package it.progetto.ecommerce.controllers;
 
 import it.progetto.ecommerce.model.dto.CarrelloProductDTO;
-import it.progetto.ecommerce.model.dto.CategoryDTO;
 import it.progetto.ecommerce.model.dto.ListaDesideriProductDTO;
-import it.progetto.ecommerce.model.entities.CarrelloProductEntity;
-import it.progetto.ecommerce.model.entities.UserDetailsEntity;
-import it.progetto.ecommerce.model.exceptions.DifferentUserException;
-import it.progetto.ecommerce.model.exceptions.ProductNotFoundException;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.services.carrello.CarrelloService;
 import it.progetto.ecommerce.services.listaDesideri.ListaDesideriService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -32,7 +26,6 @@ public class ClientController {
     @GetMapping("/carrello")
     public ResponseEntity<?> getCarrello() {
         List<CarrelloProductDTO> carrelloDTO = carrelloService.getCarrello();
-
         if(carrelloDTO == null || carrelloDTO.isEmpty()){
             return new ResponseEntity<>(new LinkedList<>(), HttpStatus.OK); //stato 200
         }
@@ -48,8 +41,8 @@ public class ClientController {
         try {
             carrelloService.addToCarrello(idProdotto);
             return new ResponseEntity<>(HttpStatus.OK); //stato 200
-        } catch (ProductNotFoundException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        } catch (CustomException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
         }
     }
 
@@ -62,11 +55,9 @@ public class ClientController {
         try {
             carrelloService.updateCarrello(idProdottoCarrello, quantity);
             return new ResponseEntity<>(HttpStatus.OK); //stato 200
-        } catch(DifferentUserException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE); //stato 406
-        } catch (ProductNotFoundException e){
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
-    }
+        } catch(CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
+        }
     }
 
     @PostMapping("/carrello/remove")
@@ -77,10 +68,8 @@ public class ClientController {
         try {
             carrelloService.removeFromCarrello(idProdottoCarrello);
             return new ResponseEntity<>(HttpStatus.OK); //stato 200
-        } catch(DifferentUserException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE); //stato 406
-        } catch (ProductNotFoundException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        } catch(CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
         }
     }
 
@@ -112,8 +101,8 @@ public class ClientController {
         try {
             listaDesideriService.addToListaDesideri(idProdotto);
             return new ResponseEntity<>(HttpStatus.OK); //stato 200
-        } catch (ProductNotFoundException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        } catch (CustomException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
         }
     }
 
@@ -124,10 +113,11 @@ public class ClientController {
         try {
             listaDesideriService.removeFromListaDesideri(idProdottoListaDesideri);
             return new ResponseEntity<>(HttpStatus.OK); //stato 200
-        } catch(DifferentUserException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE); //stato 406
-        } catch (ProductNotFoundException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //stato 404
+        } catch(CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
         }
     }
+
 }
+
+
