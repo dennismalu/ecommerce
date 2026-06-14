@@ -23,8 +23,6 @@ public class OrderEntity {
 
     private String address;
 
-    private PagamentType pagamentType; //enum: portafoglio piattaforma, pagamento alla consegna
-
     private Date date;
 
     private Double price;

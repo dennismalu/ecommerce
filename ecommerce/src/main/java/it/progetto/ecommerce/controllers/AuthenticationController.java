@@ -8,6 +8,7 @@ import it.progetto.ecommerce.model.dto.AuthenticationResponseDTO;
 import it.progetto.ecommerce.model.dto.SignUpDTO;
 import it.progetto.ecommerce.model.entities.UserDetailsEntity;
 import it.progetto.ecommerce.model.entities.UserEntity;
+import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.model.mapper.UserMapper;
 import it.progetto.ecommerce.repository.UserRepository;
 import it.progetto.ecommerce.services.jwt.JwtService;
@@ -69,11 +70,12 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUpUser(@RequestBody SignUpDTO signUpDTO){
-        UserEntity createdUser = userService.createUser(signUpDTO);
-        if(createdUser == null){
-            return new ResponseEntity<>("Utente non creato!", HttpStatus.BAD_REQUEST); //stato 400
+        try {
+            UserEntity createdUser = userService.createUser(signUpDTO);
+            String jwtToken = jwtService.generateToken(createdUser.getEmail());
+            return new ResponseEntity<>(new AuthenticationResponseDTO(jwtToken, createdUser.getName(), createdUser.getRole()), HttpStatus.CREATED); //stato 201
+        } catch (CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
         }
-        //UserDTO createdUserDto = userMapper.toDto(createdUser);
-        return new ResponseEntity<>(HttpStatus.CREATED); //stato 201
     }
 }

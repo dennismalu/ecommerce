@@ -1,7 +1,7 @@
-<div class="container container-div">
+<div class="container container-div" [style.background-color]="'var(--colore-sfondo-principale)'" [style.color]="'var(--colore-testo-generale)'">
 
   <!-- Filtri e ordinamento -->
-  <div class="filters-section container-div">
+  <div class="filters-section container-div" [style.background-color]="'var(--colore-sfondo-sezione)'">
 
     <!-- PRIMA RIGA -->
     <nz-row nzGutter="16" nzJustify="center" nzAlign="middle" style="margin-bottom: 16px;">
@@ -21,7 +21,7 @@
                     formControlName="includeDisabled"
                     (ngModelChange)="onNameOrFilterOrPageSizeChange()"
                 >
-                    Includi prodotti disabilitati
+                    <span [style.color]="'var(--colore-testo-generale)'">Includi prodotti disabilitati</span>
                 </label>
             </form>
         </div>
@@ -34,7 +34,7 @@
 
         <!-- Ordinamento -->
         <div nz-col nzSpan="8">
-            <label nz-label>Ordina per:</label>
+            <label nz-label [style.color]="'var(--colore-testo-generale)'">Ordina per:</label>
             <nz-select 
             class="filter-control"
             nzPlaceHolder="Ordina prodotti" 
@@ -51,7 +51,7 @@
 
         <!-- Elementi per pagina -->
         <div nz-col nzSpan="6">
-        <label nz-label>Elementi per pagina:</label>
+        <label nz-label [style.color]="'var(--colore-testo-generale)'">Elementi per pagina:</label>
         <nz-select 
             class="filter-control"
             style="width: 100%" 
@@ -79,7 +79,7 @@
     
         <!-- Filtro per categoria -->
         <div nz-col nzSpan="8">
-            <label nz-label>Categoria:</label>
+            <label nz-label [style.color]="'var(--colore-testo-generale)'">Categoria:</label>
             <nz-select 
             class="filter-control"
             nzPlaceHolder="Seleziona categoria" 
@@ -119,10 +119,10 @@
             </button>
 
             <div style="text-align: center;">
-              <div style="font-weight: 500; white-space: nowrap;">
+              <div style="font-weight: 500; white-space: nowrap;" [style.color]="'var(--colore-testo-generale)'">
                 Pagina {{ currentPage }} di {{ totalPages }}
               </div>
-              <div style="font-size: 14px; color: #666; margin-top: 4px; white-space: nowrap;">
+              <div style="font-size: 14px; margin-top: 4px; white-space: nowrap;" [style.color]="'var(--colore-testo-paragrafo)'">
                 Totale prodotti: {{ totalElements }}
               </div>
             </div>
@@ -145,10 +145,10 @@
 
 
   <!-- Messaggio quando non ci sono prodotti -->
-  <div *ngIf="searchDone && products.length === 0" class="no-products">
-    <h3 *ngIf="selectedCategory === -1">Nessun prodotto disponibile</h3>
-    <h3 *ngIf="selectedCategory !== -1">Nessun prodotto nella categoria selezionata</h3>
-    <p>Non ci sono prodotti che corrispondono al nome che hai cercato!</p>
+  <div *ngIf="searchDone && products.length === 0" class="no-products" [style.background-color]="'var(--colore-sfondo-container)'">
+    <h3 *ngIf="selectedCategory === -1" [style.color]="'var(--colore-testo-intestazione)'">Nessun prodotto disponibile</h3>
+    <h3 *ngIf="selectedCategory !== -1" [style.color]="'var(--colore-testo-intestazione)'">Nessun prodotto nella categoria selezionata</h3>
+    <p [style.color]="'var(--colore-testo-paragrafo)'">Non ci sono prodotti che corrispondono al nome che hai cercato!</p>
   </div>
 
 
@@ -168,7 +168,7 @@
 
   <!-- Griglia prodotti -->
   <div class="product-grid container-div">
-    <div class="child" *ngFor="let product of products"> 
+    <div class="child" *ngFor="let product of products" [style.background-color]="'var(--colore-sfondo-card)'"> 
 
       <div nz-row> 
         <div nz-col nzSpan="8"> 
@@ -176,23 +176,23 @@
         </div> 
         
         <div nz-col nzSpan="16"> 
-          <h2> {{ product.name }} </h2> 
+          <h2 [style.color]="'var(--colore-testo-intestazione)'"> {{ product.name }} </h2> 
           <!-- Se la descrizione è null mette di default una stringa vuota; 
                riduco la descrizione ai soli primi 65 caratteri, se la
                descrizione ha delle parole che sono state troncate aggiunge ... -->
-          <p>{{ (product.description || '').substring(0, 65) + (product.description?.length > 65 ? '...' : '') }}</p>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">{{ (product.description || '').substring(0, 65) + (product.description?.length > 65 ? '...' : '') }}</p>
           
           <hr />  <!-- barra orizzontale -->
 
           <!-- ADMIN -->
-          <h5 *ngIf="isAdminLoggedIn"> 
+          <h5 *ngIf="isAdminLoggedIn" [style.color]="'var(--colore-testo-paragrafo)'"> 
             Prezzo: <b class="price">{{ product.price }}€</b> - 
             Categoria: <b class="category">{{ product.categoryName }}</b>  -
             Stato: <b class="status">{{ product.disabled ? 'disabilitato' : 'abilitato' }}</b>
           </h5> 
 
           <!-- USER E UTENTE NON LOGGATO-->
-          <h5 *ngIf="!isAdminLoggedIn"> 
+          <h5 *ngIf="!isAdminLoggedIn" [style.color]="'var(--colore-testo-paragrafo)'"> 
             Prezzo: <b class="price">{{ product.price }}€</b> - 
             Categoria: <b class="category">{{ product.categoryName }}</b>
           </h5> 

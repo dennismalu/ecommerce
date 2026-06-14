@@ -1,9 +1,9 @@
-<div class="bg">
+<div class="bg" [style.background-color]="'var(--colore-sfondo-principale)'" [style.color]="'var(--colore-testo-generale)'">
     <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" nzTip="Attendi..."> 
         <div class="parent"> 
-            <div class="child"> 
+            <div class="child" [style.background-color]="'var(--colore-sfondo-card)'"> 
                 <div nz-row class="titleDiv"> 
-                    <h2>Aggiungi Categoria</h2> 
+                    <h2 [style.color]="'var(--colore-testo-intestazione)'">Aggiungi Categoria</h2> 
                 </div> 
                 
                 <form nz-form [formGroup]="categoryForm"> 

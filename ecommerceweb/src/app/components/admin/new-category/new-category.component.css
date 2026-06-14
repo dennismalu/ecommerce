@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f8f8f8;
+  background-color: var(--colore-sfondo-principale);
 }
 
 /* Contenitore principale */
@@ -18,7 +18,7 @@
 
 /* Contenitore del form */
 .child {
-  background: white;
+  background: var(--colore-sfondo-card);
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);

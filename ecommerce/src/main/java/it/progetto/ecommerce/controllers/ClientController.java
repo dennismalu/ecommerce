@@ -2,6 +2,7 @@ package it.progetto.ecommerce.controllers;
 
 import it.progetto.ecommerce.model.dto.CarrelloProductDTO;
 import it.progetto.ecommerce.model.dto.ListaDesideriProductDTO;
+import it.progetto.ecommerce.model.dto.OrderDTO;
 import it.progetto.ecommerce.model.exceptions.CustomException;
 import it.progetto.ecommerce.services.carrello.CarrelloService;
 import it.progetto.ecommerce.services.listaDesideri.ListaDesideriService;
@@ -69,6 +70,18 @@ public class ClientController {
             carrelloService.removeFromCarrello(idProdottoCarrello);
             return new ResponseEntity<>(HttpStatus.OK); //stato 200
         } catch(CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
+        }
+    }
+
+    @PostMapping("/carrello/order")
+    public ResponseEntity<?> orderCarrello(
+            @RequestBody OrderDTO orderDTO
+    ) {
+        try {
+            carrelloService.orderCarrello(orderDTO);
+            return new ResponseEntity<>(HttpStatus.OK); //stato 200
+        } catch (CustomException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getStatusCode()));
         }
     }

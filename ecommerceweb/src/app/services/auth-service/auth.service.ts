@@ -21,7 +21,31 @@ export class AuthService {
 
   //metodo che fa una POST sul backend
   register(signupDTO: any): Observable<any>{
-    return this.http.post(BASIC_URL + "sign-up", signupDTO)
+    return this.http.post(BASIC_URL + "sign-up", signupDTO).pipe(
+      tap((response: any) => {
+        // Estrai i dati dalla risposta
+        const jwtToken = response.jwtToken;
+        const name = response.name;
+        //const userId = response.userId;
+        const userRole = response.role;
+
+        // Salva i dati nel localStorage (se non sono vuoti)
+        if (jwtToken && userRole) {
+          this.localStorageService.saveToken(jwtToken);
+          this.localStorageService.saveName(name);
+          this.localStorageService.saveUserRole(userRole);
+          
+          //di default non memorizzo email e password, l'utente sceglierà se memorizzarle al prossimo accesso
+          this.localStorageService.removeEmail();
+          this.localStorageService.removePassword();
+        } 
+        else {
+          console.error('Errore nei dati inviati dal server: ', response);
+        }
+
+        return response;
+      })
+    );
   }
 
 

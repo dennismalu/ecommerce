@@ -1,4 +1,4 @@
-<div class="home-container">
+<div class="home-container" [style.background-color]="'var(--colore-sfondo-principale)'" [style.color]="'var(--colore-testo-generale)'">
   <!-- Hero Section -->
   <section class="hero scroll-fade-in">
     <div class="hero-content">
@@ -9,13 +9,13 @@
   </section>
 
   <!-- About Section -->
-  <section class="about scroll-fade-in">
+  <section class="about scroll-fade-in" [style.background-color]="'var(--colore-sfondo-sezione)'">
     <div class="container">
-      <h2>Chi Siamo</h2>
+      <h2 [style.color]="'var(--colore-testo-intestazione)'">Chi Siamo</h2>
       <div  class="about-content">
         <div class="about-text">
-          <p>SoundHub Arcavacata è il negozio di strumenti musicali situato nella suggestiva località collinare di Arcavacata, a pochi minuti da Cosenza. Con anni di esperienza nel settore, siamo il punto di riferimento per musicisti, produttori e appassionati di musica di tutta la Calabria.</p>
-          <p>La nostra missione è fornire strumenti di alta qualità, consigli professionali e un servizio clienti eccezionale per aiutarti a realizzare la tua passione musicale.</p>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">SoundHub Arcavacata è il negozio di strumenti musicali situato nella suggestiva località collinare di Arcavacata, a pochi minuti da Cosenza. Con anni di esperienza nel settore, siamo il punto di riferimento per musicisti, produttori e appassionati di musica di tutta la Calabria.</p>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">La nostra missione è fornire strumenti di alta qualità, consigli professionali e un servizio clienti eccezionale per aiutarti a realizzare la tua passione musicale.</p>
         </div>
 
 
@@ -78,53 +78,53 @@
   </section>
 
   <!-- Products Section -->
-  <section class="products scroll-fade-in">
+  <section class="products scroll-fade-in" [style.background-color]="'var(--colore-sfondo-principale)'">
     <div class="container">
-      <h2>Cosa Trovi da Noi</h2>
+      <h2 [style.color]="'var(--colore-testo-intestazione)'">Cosa Trovi da Noi</h2>
       <div class="products-grid">
-        <div class="product-category">
+        <div class="product-category" [style.background-color]="'var(--colore-sfondo-card)'">
           <div class="category-icon">🎸</div>
-          <h3>Strumenti Musicali</h3>
-          <p>Chitarre, bassi, tastiere, batterie, strumenti a fiato e molto altro</p>
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Strumenti Musicali</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Chitarre, bassi, tastiere, batterie, strumenti a fiato e molto altro</p>
         </div>
-        <div class="product-category">
+        <div class="product-category" [style.background-color]="'var(--colore-sfondo-card)'">
           <div class="category-icon">🎹</div>
-          <h3>Home Studio</h3>
-          <p>Interface audio, monitor, microfoni e tutto ciò che serve per il tuo studio</p>
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Home Studio</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Interface audio, monitor, microfoni e tutto ciò che serve per il tuo studio</p>
         </div>
-        <div class="product-category">
+        <div class="product-category" [style.background-color]="'var(--colore-sfondo-card)'">
           <div class="category-icon">💻</div>
-          <h3>Software Musicali</h3>
-          <p>DAW, plugin, librerie virtuali e strumenti per la produzione</p>
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Software Musicali</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">DAW, plugin, librerie virtuali e strumenti per la produzione</p>
         </div>
-        <div class="product-category">
+        <div class="product-category" [style.background-color]="'var(--colore-sfondo-card)'">
           <div class="category-icon">🎧</div>
-          <h3>Accessori</h3>
-          <p>Cavi, custodie, accordatori, plettri e tutto l'occorrente</p>
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Accessori</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Cavi, custodie, accordatori, plettri e tutto l'occorrente</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Location Section -->
-  <section class="location scroll-fade-in">
+  <section class="location scroll-fade-in" [style.background-color]="'var(--colore-sfondo-sezione)'">
     <div class="container">
-      <h2>Dove Siamo</h2>
+      <h2 [style.color]="'var(--colore-testo-intestazione)'">Dove Siamo</h2>
       <div class="location-content">
         <div class="location-text">
-          <p>Ci troviamo ad <strong>Arcavacata</strong>, una splendida località collinare a pochi minuti dal centro di Cosenza. La nostra posizione offre un ambiente tranquillo e suggestivo, perfetto per immergersi nel mondo della musica.</p>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Ci troviamo ad <strong>Arcavacata</strong>, una splendida località collinare a pochi minuti dal centro di Cosenza. La nostra posizione offre un ambiente tranquillo e suggestivo, perfetto per immergersi nel mondo della musica.</p>
           <div class="location-details">
             <div class="detail">
-              <h4>Indirizzo</h4>
-              <p>Via Pietro Bucci, 73 - 87036 Rende (CS)</p>
+              <h4 [style.color]="'var(--colore-testo-intestazione)'">Indirizzo</h4>
+              <p [style.color]="'var(--colore-testo-paragrafo)'">Via Pietro Bucci, 73 - 87036 Rende (CS)</p>
             </div>
             <div class="detail">
-              <h4>Orari di Apertura</h4>
-              <p>Lun-Ven: 9:00-13:00 / 16:00-19:00<br>Sab: 9:00-13:00</p>
+              <h4 [style.color]="'var(--colore-testo-intestazione)'">Orari di Apertura</h4>
+              <p [style.color]="'var(--colore-testo-paragrafo)'">Lun-Ven: 9:00-13:00 / 16:00-19:00<br>Sab: 9:00-13:00</p>
             </div>
             <div class="detail">
-              <h4>Contatti</h4>
-              <p>Telefono: 0984 123456<br>Email: info&#64;soundhubarcavacata.it</p>  <!-- &#64 è la @ -->
+              <h4 [style.color]="'var(--colore-testo-intestazione)'">Contatti</h4>
+              <p [style.color]="'var(--colore-testo-paragrafo)'">Telefono: 0984 123456<br>Email: info&#64;soundhubarcavacata.it</p>  <!-- &#64 è la @ -->
             </div>
           </div>
         </div>
@@ -140,25 +140,25 @@
   </section>
 
   <!-- Services Section -->
-  <section class="services scroll-fade-in">
+  <section class="services scroll-fade-in" [style.background-color]="'var(--colore-sfondo-principale)'">
     <div class="container">
-      <h2>I Nostri Servizi</h2>
+      <h2 [style.color]="'var(--colore-testo-intestazione)'">I Nostri Servizi</h2>
       <div class="services-grid">
-        <div class="service">
-          <h3>Assistenza Tecnica</h3>
-          <p>Riparazione e manutenzione di strumenti musicali e attrezzature audio</p>
+        <div class="service" [style.background-color]="'var(--colore-sfondo-card)'">
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Assistenza Tecnica</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Riparazione e manutenzione di strumenti musicali e attrezzature audio</p>
         </div>
-        <div class="service">
-          <h3>Consulenza Personalizzata</h3>
-          <p>Ti aiutiamo a scegliere lo strumento o l'attrezzatura più adatta alle tue esigenze</p>
+        <div class="service" [style.background-color]="'var(--colore-sfondo-card)'">
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Consulenza Personalizzata</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Ti aiutiamo a scegliere lo strumento o l'attrezzatura più adatta alle tue esigenze</p>
         </div>
-        <div class="service">
-          <h3>Finanziamenti</h3>
-          <p>Possibilità di rateizzazione per acquisti di importo elevato</p>
+        <div class="service" [style.background-color]="'var(--colore-sfondo-card)'">
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Finanziamenti</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Possibilità di rateizzazione per acquisti di importo elevato</p>
         </div>
-        <div class="service">
-          <h3>Lezioni di Musica</h3>
-          <p>Collaboriamo con insegnanti qualificati per lezioni di strumento e teoria musicale</p>
+        <div class="service" [style.background-color]="'var(--colore-sfondo-card)'">
+          <h3 [style.color]="'var(--colore-testo-intestazione)'">Lezioni di Musica</h3>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">Collaboriamo con insegnanti qualificati per lezioni di strumento e teoria musicale</p>
         </div>
       </div>
     </div>

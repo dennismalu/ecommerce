@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UtilsService } from '../../services/utils-service/utils.service';
 import { CarrelloService } from '../../services/api-services/carrello-service/carrello.service';
 import { ListaDesideriService } from '../../services/api-services/lista-desideri-service/lista-desideri.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 //per le categorie e la scelta dell'ordinamento
@@ -78,6 +79,8 @@ export class SearchProductComponent{
   listaDesideriItems: ListaDesideriItem[] = [];
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private carrelloService: CarrelloService,
     private listaDesideriService: ListaDesideriService,
     private productService: ProductService,
@@ -98,6 +101,19 @@ export class SearchProductComponent{
 
 
   async ngOnInit(){
+    this.selectedSort = Number(this.route.snapshot.queryParamMap.get('sort')) || 0;
+    this.selectedCategory = Number(this.route.snapshot.queryParamMap.get('category')) || -1; //-1 --> tutte le categorie (all)
+  
+    this.currentPage = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
+    this.pageSize = Number(this.route.snapshot.queryParamMap.get('size')) || 20; // default
+    this.nameSearch = this.route.snapshot.queryParamMap.get('search') || ""; // default - NOOOOO cast a String --> ERRORISSIMO!
+
+
+    if(this.nameSearch != null && this.nameSearch != undefined && this.nameSearch != ""){
+      this.searchDone = true;
+    }
+    
+
     this.setCategories(); //fa la GET delle categorie
 
     //OBIETTIVO: la pagina non deve venire renderizzata sul server (dove non 
@@ -126,6 +142,40 @@ export class SearchProductComponent{
       this.loadCart();
       this.loadListaDesideri();
     }
+
+    // Ricarica gli elementi ai cambi di query param nella stessa route
+    this.route.queryParams.subscribe(params => {
+      const newSort = Number(params['sort']) || 0;
+      const newCategory = Number(params['category']) || -1;
+      const newPage = Number(params['page']) || 1;
+      const newSize = Number(params['size']) || 20;
+      const newSearch = params['search'] || ''; //NOOOOO cast a String --> ERRORISSIMO!
+
+      //se i parametri cambiano (frecce indietro e avanti nel browser) aggiorno i campi e ricarico i prodotti
+      if ( 
+          (
+          newSort !== this.selectedSort ||
+          newCategory !== this.selectedCategory ||
+          newPage !== this.currentPage ||
+          newSize !== this.pageSize ||
+          newSearch !== this.nameSearch
+        ) && (newSearch != null && newSearch != undefined && newSearch != "")
+      ) {
+        this.selectedSort = newSort;
+        this.selectedCategory = newCategory;
+        this.currentPage = newPage;
+        this.pageSize = newSize;
+        this.nameSearch = newSearch;
+      }
+
+      //se sto solo interagendo con la pagina i valori vengono settati dai metodi prima del cambio dei query param
+      this.setElements();    
+      this.searchForm.patchValue({
+        name: this.nameSearch
+      });
+      
+    });
+
   }
 
 
@@ -209,13 +259,15 @@ export class SearchProductComponent{
 
   onNameOrFilterOrPageSizeChange() {
     this.currentPage = 1; // reset pagina quando cambio filtro
-    this.setElements();
+    this.router.navigate(['/search-product'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory, search: this.nameSearch } });
+    //this.setElements();
   }
 
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.setElements();
+      this.router.navigate(['/search-product'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory, search: this.nameSearch } });
+      //this.setElements();
     }
   }
 
@@ -228,7 +280,8 @@ export class SearchProductComponent{
     this.pageSize = 20;
     this.currentPage = 1;
 
-    this.setElements();
+    this.router.navigate(['/search-product'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory, search: this.nameSearch } });
+    //this.setElements();
   }
 
 
@@ -237,7 +290,8 @@ export class SearchProductComponent{
   resetCategory() {
     this.selectedCategory = -1; //tutte le categorie (all)
     this.currentPage = 1; // reset pagina quando cambio filtro
-    this.setElements();
+    this.router.navigate(['/search-product'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory, search: this.nameSearch } });
+    //this.setElements();
   }
 
 

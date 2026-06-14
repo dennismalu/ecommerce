@@ -71,6 +71,14 @@ public class CustomExceptionBuilder {
         return new CustomException("Prodotto non rimosso dalla lista desideri", 500); //SERVER_ERROR
     }
 
+    public static CustomException orderFailed() {
+        return new CustomException("Ordine non riuscito", 500); //SERVER_ERROR
+    }
+
+    public static CustomException prezziNonAggiornati() {
+        return new CustomException("Errore, per favore ricarica la pagina", 406); //NOT_ACCEPTABLE
+    }
+
     public static CustomException userNotAllowed() {
         return new CustomException("Utente non autorizzato", 405); //METHOD_NOT_ALLOWED
     }

@@ -20,7 +20,7 @@
   <div class="nav-links desktop-only" *ngIf="!isUserLoggedIn && !isAdminLoggedIn">
     <a nz-button nzType="link" routerLink="/login" routerLinkActive="active">Accedi</a>
     <a nz-button nzType="link" routerLink="/register" routerLinkActive="active">Registrati</a>
-    <button nz-button nzType="text" class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
+    <button nz-button class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
       Menu
     </button>
   </div>
@@ -29,7 +29,7 @@
   <div class="nav-links desktop-only" *ngIf="isAdminLoggedIn">
     <a nz-button nzType="link" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
     <a nz-button nzType="link" (click)="logout()">Logout</a>
-    <button nz-button nzType="text" class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
+    <button nz-button class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
       Menu
     </button>
   </div>
@@ -38,7 +38,7 @@
   <div class="nav-links desktop-only" *ngIf="isUserLoggedIn && !isAdminLoggedIn">
     <a nz-button nzType="link" routerLink="/user/dashboard" routerLinkActive="active">Dashboard</a>
     <a nz-button nzType="link" (click)="logout()">Logout</a>
-    <button nz-button nzType="text" class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
+    <button nz-button class="menu-toggle" (click)="toggleMenu(); $event.stopPropagation()">
       Menu
     </button>
   </div>
@@ -48,7 +48,7 @@
 
 
   <!-- Versione MOBILE: solo pulsante Menu -->
-  <button nz-button nzType="text" class="menu-toggle mobile-only" (click)="toggleMenu(); $event.stopPropagation()">
+  <button nz-button class="menu-toggle mobile-only" (click)="toggleMenu(); $event.stopPropagation()">
     Menu
   </button>
 
@@ -61,6 +61,7 @@
       <a nz-button nzType="link" routerLink="/register" routerLinkActive="active" (click)="closeMenu()">Registrati</a>
       <a nz-button nzType="link" routerLink="/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
       <a nz-button nzType="link" routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Tutti i prodotti</a>
+      <a nz-button nzType="link" (click)="changeThemeAndCloseMenu()">Passa al tema {{ getOppositeThemeText() }}</a>
     </ng-container>
 
     <!-- links per admin -->
@@ -71,6 +72,7 @@
       <a nz-button nzType="link" routerLink="/search-product" routerLinkActive="active" (click)="closeMenu()">Cerca un prodotto</a>
       <a nz-button nzType="link" routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Tutti i prodotti (abilitati)</a>
       <a nz-button nzType="link" routerLink="/admin/disable-products" routerLinkActive="active" (click)="closeMenu()">Prodotti disabilitati</a>
+      <a nz-button nzType="link" (click)="changeThemeAndCloseMenu()">Passa al tema {{ getOppositeThemeText() }}</a>
       <a class="mobile-only" nz-button nzType="link" (click)="logoutAndClose()">Logout</a>
     </ng-container>
 
@@ -81,6 +83,7 @@
       <a nz-button nzType="link" routerLink="/user/carrello" routerLinkActive="active" (click)="closeMenu()">Carrello</a>
       <a nz-button nzType="link" routerLink="/user/lista-desideri" routerLinkActive="active" (click)="closeMenu()">Lista desideri</a>
       <a nz-button nzType="link" routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Tutti i prodotti</a>
+      <a nz-button nzType="link" (click)="changeThemeAndCloseMenu()">Passa al tema {{ getOppositeThemeText() }}</a>
       <a class="mobile-only" nz-button nzType="link" (click)="logoutAndClose()">Logout</a>
     </ng-container>
 

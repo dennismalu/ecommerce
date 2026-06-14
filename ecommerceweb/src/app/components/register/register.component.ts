@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { DialogService } from '../../services/dialog-service/dialog-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register', //tag HTML per usare questo componente
@@ -24,6 +25,7 @@ export class RegisterComponent {
   //il costruttore inietta il servizio FormBuilder, che semplifica la creazione di form reattivi
   //l'authService è necessario per effettuare la POST al backend (registrare un utente)
   constructor(
+    private router: Router,
     private fb: FormBuilder, 
     private authService: AuthService,
     private dialogService: DialogService  
@@ -130,6 +132,7 @@ export class RegisterComponent {
         next: (response) => {
           //console.log("Registrazione avvenuta con successo:", response);
           this.dialogService.openSuccessDialog("Operazione completata", "Registrazione avvenuta con successo!");
+          this.router.navigateByUrl("/user/dashboard");
         },
         error: (error) => {
           //console.error("Errore durante la registrazione:", error);

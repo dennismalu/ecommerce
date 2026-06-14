@@ -1,0 +1,73 @@
+:root {
+  --minheight:  calc(100vh - 141px); /* 64px navbar + 77px footer*/;
+  --sfondoNavbarFooter: #083973; 
+  --titoli: #083973;
+  --sfondoLinkNavbar: #1890ff;
+  --navLinksHover: rgba(255, 255, 255, 0.1);
+  --pulsanti: #083973; /* login e registrazione */
+  --pulsantiHover: #1890ff; /* footer, login e registrazione */
+  --linkHover: #0d4a8f;
+
+  --colorPriceValue: #52c41a;
+  --colorCategoryValue: #722ed1;
+  --colorStatusValue: #fa541c;
+
+  /* Variabili per colori testo e sfondi */
+  --colore-testo-generale: #000000;
+  --colore-testo-paragrafo: #000000;
+  --colore-testo-intestazione: #083973;
+  --colore-sfondo-principale: #ffffff;
+  --colore-sfondo-sezione: #F8F8F8;
+  --colore-sfondo-card: #ffffff;
+  --colore-sfondo-card-hover: #f5f5f5;
+  --colore-sfondo-container: #ffffff;
+
+  /* Variabili per input e select */
+  --colore-input-background: #ffffff;
+  --colore-input-text: #000000;
+  --colore-input-border: #d9d9d9;
+  --colore-input-placeholder: rgba(0, 0, 0, 0.25);
+  --colore-select-background: #ffffff;
+  --colore-select-text: #000000;
+  --colore-select-border: #d9d9d9;
+  --colore-select-dropdown-background: #ffffff;
+  --colore-select-dropdown-text: #000000;
+
+  /* Variabili per pulsanti */
+  --colore-pulsante-default-background: #ffffff;
+  --colore-pulsante-default-text: #000000;
+  --colore-pulsante-default-border: #d9d9d9;
+  --colore-pulsante-default-hover-background: #fafafa;
+  --colore-pulsante-default-hover-text: #000000;
+  --colore-pulsante-default-hover-border: #40a9ff;
+  --colore-pulsante-text-background: transparent;
+  --colore-pulsante-text-text: #000000;
+  --colore-pulsante-text-hover-background: rgba(0, 0, 0, 0.06);
+}
+
+
+
+
+
+.aggiungi-carrello-button{
+  color: white; 
+  background-color: green;
+}
+
+.aggiungi-carrello-button:hover{
+  color: white; 
+  background-color: rgb(22, 168, 22);
+}
+
+
+.aggiungi-lista-desideri-button{
+  color: white; 
+  background-color: rgb(87, 27, 122);
+}
+
+.aggiungi-lista-desideri-button:hover{
+  color: white; 
+  background-color: rgb(148, 16, 224);
+}
+
+

@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #F8F8F8;
+    background-color: var(--colore-sfondo-principale);
 }
 
 /* Contenitore principale */
@@ -18,7 +18,7 @@
 
 /* Contenitore del form */
 .child {
-    background: white;
+    background: var(--colore-sfondo-card);
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -102,15 +102,12 @@ nz-input:focus {
     max-height: none !important;
 }
 
-/* Responsive */
-@media (max-width: 576px) {
-    .child {
-        padding: 30px 20px;/* Stile per il divisore con testo */
+/* Stile per il divisore con testo */
 .divider {
     display: flex;
     align-items: center;
     margin: 12px 0;
-    color: #8c8c8c;
+    color: var(--colore-testo-paragrafo);
 }
 
 .divider::before,
@@ -127,48 +124,15 @@ nz-input:focus {
     font-weight: 500;
 }
 
-/* Stile per il gruppo pulsanti */
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 16px;
-}
+/* Responsive */
+@media (max-width: 576px) {
+    .child {
+        padding: 30px 20px;
         margin: 0 15px;
     }
     
     .titleDiv h1 {
         font-size: 24px;
     }
-}
-
-/* Stile per il divisore con testo */
-.divider {
-    display: flex;
-    align-items: center;
-    margin: 12px 0;
-    color: #8c8c8c;
-}
-
-.divider::before,
-.divider::after {
-    content: "";
-    flex: 1;
-    border-bottom: 1px solid #d9d9d9;
-}
-
-.divider-text {
-    padding: 0 12px;
-    font-size: 14px;
-    text-transform: uppercase;
-    font-weight: 500;
-}
-
-/* Stile per il gruppo pulsanti */
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 16px;
 }
 

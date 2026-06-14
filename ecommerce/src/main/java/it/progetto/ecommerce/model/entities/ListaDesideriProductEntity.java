@@ -17,13 +17,13 @@ public class ListaDesideriProductEntity {
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="user_id", nullable = false) //, referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    //se viene eliminato l'utente vengono eliminati anche tutti prodotti nel carrello
+    //se viene eliminato l'utente vengono eliminati anche tutti prodotti nella lista dei desideri
     @JsonIgnore //per non caricarlo nel json da restituire
     private UserEntity user;
 
     @ManyToOne(fetch=FetchType.EAGER, optional = false)
     @JoinColumn(name="product_id", nullable = false) //, referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    //se viene eliminato un prodotto vengono eliminato anche da tutti gli ordini
+    //se viene eliminato un prodotto viene rimosso anche dalla lista desideri
     private ProductEntity product;
 }

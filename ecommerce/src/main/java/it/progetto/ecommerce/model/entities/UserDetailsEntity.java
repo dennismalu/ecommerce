@@ -24,6 +24,8 @@ public class UserDetailsEntity implements UserDetails {
 
     private UserRole role;
 
+    private Double portafoglio;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

@@ -23,4 +23,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Modifying @Transactional
     @Query("UPDATE UserEntity u SET u.lastSearch = :lastSearch WHERE u.id = :id")
     void updateLastSearchById(@Param("id") Long id, @Param("lastSearch") String lastSearch);
+
+    @Modifying
+    @Query("UPDATE UserEntity u SET u.portafoglio = :portafoglio WHERE u.id = :id")
+    void updatePortafoglioById(@Param("id") Long id, @Param("portafoglio") Double portafoglio);
 }

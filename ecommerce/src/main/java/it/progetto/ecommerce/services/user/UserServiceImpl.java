@@ -43,8 +43,14 @@ public class UserServiceImpl implements UserService {
             user.setName(adminName);
             user.setRole(UserRole.ADMIN);
             user.setPassword(bCryptPasswordEncoder.encode(adminPassword));
+            user.setPortafoglio(0.0d);
             userRepository.save(user); //salva nel DB
         }
+    }
+
+    @Override
+    public UserEntity getAdminUserEntity() {
+        return userRepository.findByRole(UserRole.ADMIN);
     }
 
 
@@ -67,6 +73,7 @@ public class UserServiceImpl implements UserService {
         user.setCarrelloProducts(new LinkedList<>());
         user.setListaDesideriProducts(new LinkedList<>());
         user.setLastSearch(null);
+        user.setPortafoglio(0.0d);
         try {
             return userRepository.save(user); //salva nel DB
         } catch (Exception e) {

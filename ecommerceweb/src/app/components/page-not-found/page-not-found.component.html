@@ -1,8 +1,8 @@
-<div class="not-found-container">
-  <div class="not-found-content">
+<div class="not-found-container" [style.background-color]="'var(--colore-sfondo-principale)'">
+  <div class="not-found-content" [style.background-color]="'var(--colore-sfondo-card)'">
     <img src="assets/images/error404.jpg" alt="Errore 404" class="not-found-image">
 <!--    <h1 class="not-found-title">404</h1>   -->
-    <p class="not-found-message">Oops! La pagina che stai cercando non è stata trovata.</p>
+    <p class="not-found-message" [style.color]="'var(--colore-testo-paragrafo)'">Oops! La pagina che stai cercando non è stata trovata.</p>
     <a class="not-found-button" (click)="redirect()">{{ buttonText }}</a>
   </div>
 </div>

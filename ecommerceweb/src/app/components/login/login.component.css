@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #F8F8F8;
+    background-color: var(--colore-sfondo-principale);
 }
 
 /* Contenitore principale */
@@ -18,7 +18,7 @@
 
 /* Contenitore del form */
 .child {
-    background: white;
+    background: var(--colore-sfondo-card);
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -56,7 +56,7 @@ nz-input:focus {
 /* Checkbox "Ricordami" */
 nz-checkbox {
     font-size: 14px;
-    color: #333;
+    color: var(--colore-testo-generale);
 }
 
 /* Gruppo pulsanti */
@@ -113,7 +113,7 @@ nz-checkbox {
     display: flex;
     align-items: center;
     margin: 12px 0;
-    color: #8c8c8c;
+    color: var(--colore-testo-paragrafo);
 }
 
 .divider::before,

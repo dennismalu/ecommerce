@@ -213,7 +213,7 @@ h2 {
 }
 
 .indicator.active {
-  background: white;
+  background: var(--colore-testo-intestazione);
 }
 
 .indicator:hover {
@@ -271,7 +271,7 @@ h2 {
 }
 
 .product-category {
-  background: white;
+  background: var(--colore-sfondo-card);
   padding: 30px;
   border-radius: 8px;
   text-align: center;
@@ -346,7 +346,7 @@ h2 {
 }
 
 .service {
-  background: white;
+  background: var(--colore-sfondo-card);
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);

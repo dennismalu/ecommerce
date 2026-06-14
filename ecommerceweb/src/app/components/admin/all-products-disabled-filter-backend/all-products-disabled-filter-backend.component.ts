@@ -3,6 +3,7 @@ import { ProductService } from '../../../services/api-services/product-service/p
 import { DialogService } from '../../../services/dialog-service/dialog-service.service';
 import { LocalStorageService } from '../../../services/storage-service/local-storage.service';
 import { CategoryService } from '../../../services/api-services/category-service/category.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 //per le categorie e la scelta dell'ordinamento
@@ -43,6 +44,8 @@ export class AllProductsDisabledFilterBackendComponent {
 
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private productService: ProductService,
     private categoryService: CategoryService,
     private dialogService: DialogService,
@@ -51,7 +54,14 @@ export class AllProductsDisabledFilterBackendComponent {
 
 
   async ngOnInit(){
-    await this.resetFilters(); //fa anche la GET dei prodotti - await: attende il completamento 
+    this.selectedSort = Number(this.route.snapshot.queryParamMap.get('sort')) || 0;
+    this.selectedCategory = Number(this.route.snapshot.queryParamMap.get('category')) || -1; //-1 --> tutte le categorie (all)
+  
+    this.currentPage = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
+    this.pageSize = Number(this.route.snapshot.queryParamMap.get('size')) || 20; // default
+    
+
+    await this.setElements(); //fa SOLO la GET dei prodotti - await: attende il completamento 
     //console.log(this.products)
     if(this.products.length != 0){
       this.setCategories(); //fa la GET delle categorie
@@ -77,6 +87,32 @@ export class AllProductsDisabledFilterBackendComponent {
       //console.log('Admin logged in status changed to:', status); //log
       this.isAdminLoggedIn = status;
       //console.log('Current user status:', this.currentUserStatus); //log
+    });
+
+
+
+    // Ricarica gli elementi ai cambi di query param nella stessa route
+    this.route.queryParams.subscribe(params => {
+      const newSort = Number(params['sort']) || 0;
+      const newCategory = Number(params['category']) || -1;
+      const newPage = Number(params['page']) || 1;
+      const newSize = Number(params['size']) || 20;
+
+      //se i parametri cambiano (frecce indietro e avanti nel browser) aggiorno i campi e ricarico i prodotti
+      if (
+        newSort !== this.selectedSort ||
+        newCategory !== this.selectedCategory ||
+        newPage !== this.currentPage ||
+        newSize !== this.pageSize
+      ) {
+        this.selectedSort = newSort;
+        this.selectedCategory = newCategory;
+        this.currentPage = newPage;
+        this.pageSize = newSize;
+      }
+
+      //se sto solo interagendo con la pagina i valori vengono settati dai metodi prima del cambio dei query param
+      this.setElements();
     });
   }
 
@@ -129,13 +165,15 @@ export class AllProductsDisabledFilterBackendComponent {
 
   onFilterOrPageSizeChange() {
     this.currentPage = 1; // reset pagina quando cambio filtro
-    this.setElements();
+    this.router.navigate(['/admin/disable-products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
+    //this.setElements();
   }
 
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.setElements();
+      this.router.navigate(['/admin/disable-products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
+      //this.setElements();
     }
   }
 
@@ -147,9 +185,11 @@ export class AllProductsDisabledFilterBackendComponent {
     this.selectedCategory = -1; //tutte le categorie (all)
     this.pageSize = 20;
     this.currentPage = 1;
+    
+    this.router.navigate(['/admin/disable-products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
 
     //restituisce la Promise
-    return this.setElements();
+    //return this.setElements();
   }
 
 
@@ -158,7 +198,9 @@ export class AllProductsDisabledFilterBackendComponent {
   resetCategory() {
     this.selectedCategory = -1; //tutte le categorie (all)
     this.currentPage = 1; // reset pagina quando cambio filtro
-    this.setElements();
+
+    this.router.navigate(['/admin/disable-products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
+    //this.setElements();
   }
 
 
@@ -202,3 +244,4 @@ export class AllProductsDisabledFilterBackendComponent {
 
 
 }
+

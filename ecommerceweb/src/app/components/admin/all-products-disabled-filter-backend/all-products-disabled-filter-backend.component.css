@@ -1,7 +1,7 @@
 /* Stili generali */
 :host {
   display: block;
-  background-color: #f8f8f8;
+  background-color: var(--colore-sfondo-principale);
   min-height: var(--minheight, 100vh);
 }
 
@@ -17,7 +17,7 @@
 
 /* Card prodotto */
 .child {
-  background: white;
+  background: var(--colore-sfondo-card);
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -40,7 +40,7 @@
   border-radius: 8px;
   border: 1px solid #e8e8e8;
   padding: 4px;
-  background-color: white;
+  background-color: var(--colore-sfondo-card);
   transition: all 0.3s ease;
 }
 
@@ -60,7 +60,7 @@ h2 {
 
 /* Descrizione prodotto */
 p {
-  color: #666;
+  color: var(--colore-testo-paragrafo);
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 16px;
@@ -76,7 +76,7 @@ hr {
 
 /* Informazioni prezzo e categoria */
 h5 {
-  color: #333;
+  color: var(--colore-testo-paragrafo);
   font-size: 16px;
   font-weight: 500;
   margin: 0;
@@ -211,7 +211,7 @@ nz-col {
 .no-products {
   text-align: center;
   padding: 60px 20px;
-  color: #999;
+  color: var(--colore-testo-paragrafo);
   font-size: 16px;
 }
 
@@ -232,7 +232,7 @@ nz-col {
 .filters-section {
   margin-bottom: 24px;
   padding: 16px;
-  background: #F8F8F8;
+  background: var(--colore-sfondo-sezione);
   border-radius: 8px;
   border: 1px solid #e8e8e8;
 }
@@ -245,7 +245,7 @@ nz-col {
 .no-products {
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: var(--colore-testo-paragrafo);
 }
 
 

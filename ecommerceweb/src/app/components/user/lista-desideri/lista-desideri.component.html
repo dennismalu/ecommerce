@@ -1,29 +1,29 @@
-<div class="container container-div">
+<div class="container container-div" [style.background-color]="'var(--colore-sfondo-principale)'" [style.color]="'var(--colore-testo-generale)'">
 
   <!-- HEADER -->
-  <div class="cart-header child" style="padding: 20px; margin-bottom: 18px;">
-    <h1>La tua lista desideri</h1>
+  <div class="cart-header child" style="padding: 20px; margin-bottom: 18px;" [style.background-color]="'var(--colore-sfondo-container)'">
+    <h1 [style.color]="'var(--colore-testo-intestazione)'">La tua lista desideri</h1>
     <div *ngIf="enabledItems.length === 0 && disabledItems.length === 0" class="no-products">
-      <h3>Lista desideri vuota</h3>
-      <p>Non hai ancora aggiunto prodotti alla lista desideri.</p>
+      <h3 [style.color]="'var(--colore-testo-intestazione)'">Lista desideri vuota</h3>
+      <p [style.color]="'var(--colore-testo-paragrafo)'">Non hai ancora aggiunto prodotti alla lista desideri.</p>
     </div>
   </div>
 
   <!-- SEZIONE PRODOTTI ABILITATI -->
   <div *ngIf="enabledItems.length > 0" class="product-grid container-div">
-    <div class="child" *ngFor="let item of enabledItems">
+    <div class="child" *ngFor="let item of enabledItems" [style.background-color]="'var(--colore-sfondo-card)'">
       <nz-row>
         <div nz-col nzSpan="8">
           <img class="profile" [src]="item.product.image" alt="immagine_prodotto" />
         </div>
 
         <div nz-col nzSpan="16" style="padding-left: 15px;">
-          <h2>{{ item.product.name }}</h2>
-          <p>{{ (item.product.description || '').substring(0, 65) + ((item.product.description!=null && item.product.description.length > 65) ? '...' : '') }}</p>
+          <h2 [style.color]="'var(--colore-testo-intestazione)'">{{ item.product.name }}</h2>
+          <p [style.color]="'var(--colore-testo-paragrafo)'">{{ (item.product.description || '').substring(0, 65) + ((item.product.description!=null && item.product.description.length > 65) ? '...' : '') }}</p>
 
           <hr />
 
-          <h5>
+          <h5 [style.color]="'var(--colore-testo-paragrafo)'">
             Prezzo: <b class="price">{{ item.product.price }}€</b> -
             Categoria: <b class="category">{{ item.product.categoryName }}</b>
           </h5>
@@ -53,8 +53,8 @@
   </div>
 
   <!-- Totale (solo abilitati) -->
-  <div *ngIf="enabledItems.length > 0" class="child" style="display:flex; flex-direction: column; align-items:center; justify-content:end; gap: 6px;">
-    <h3>Totale lista desideri</h3>
+  <div *ngIf="enabledItems.length > 0" class="child" style="display:flex; flex-direction: column; align-items:center; justify-content:end; gap: 6px;" [style.background-color]="'var(--colore-sfondo-container)'">
+    <h3 [style.color]="'var(--colore-testo-intestazione)'">Totale lista desideri</h3>
     <p style="font-size:22px; font-weight:700; color:var(--titoli, #1890ff);">
       {{ getTotal() }}€
     </p>
@@ -64,23 +64,23 @@
   </div>
 
   <!-- SEZIONE NON PIÙ DISPONIBILI -->
-  <div *ngIf="disabledItems.length > 0" style="margin-top: 24px;">
-    <h3 style="color:#666; margin-bottom: 12px;">Non più disponibili</h3>
+  <div *ngIf="disabledItems.length > 0" style="margin-top: 24px;" [style.background-color]="'var(--colore-sfondo-sezione)'">
+    <h3 [style.color]="'var(--colore-testo-intestazione)'" style="margin-bottom: 12px;">Non più disponibili</h3>
 
     <div class="product-grid container-div">
-      <div class="child" *ngFor="let item of disabledItems">
+      <div class="child" *ngFor="let item of disabledItems" [style.background-color]="'var(--colore-sfondo-card)'">
         <nz-row>
           <div nz-col nzSpan="8">
             <img class="profile" [src]="item.product.image" alt="immagine_prodotto" />
           </div>
 
           <div nz-col nzSpan="16" style="padding-left: 15px;">
-            <h2>{{ item.product.name }}</h2>
-            <p>{{ (item.product.description || '').substring(0, 65) + ((item.product.description!=null && item.product.description.length > 65) ? '...' : '') }}</p>
+            <h2 [style.color]="'var(--colore-testo-intestazione)'">{{ item.product.name }}</h2>
+            <p [style.color]="'var(--colore-testo-paragrafo)'">{{ (item.product.description || '').substring(0, 65) + ((item.product.description!=null && item.product.description.length > 65) ? '...' : '') }}</p>
 
             <hr />
 
-            <h5>
+            <h5 [style.color]="'var(--colore-testo-paragrafo)'">
               Prezzo: <b class="price">{{ item.product.price }}€</b> -
               Categoria: <b class="category">{{ item.product.categoryName }}</b>
             </h5>

@@ -25,6 +25,32 @@ export class LocalStorageService {
 
 
 
+
+
+  saveTheme(theme: any){
+    if (this.isBrowser()) {
+      localStorage.removeItem('theme')
+      localStorage.setItem('theme', theme);
+    }
+  }
+
+  getTheme(): string | null {
+    if (this.isBrowser()) {
+      const theme = localStorage.getItem('theme');
+      if(!theme) return null;
+      return theme;
+    } 
+    return null;
+  }
+
+  removeTheme(): void{
+    if (this.isBrowser()) {
+      localStorage.removeItem('theme');
+    }
+  }
+
+
+
   saveName(name: any){
     if (this.isBrowser()) {
       localStorage.removeItem('name')
@@ -174,3 +200,5 @@ export class LocalStorageService {
 
 
 }
+
+

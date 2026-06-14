@@ -5,6 +5,7 @@ import { LocalStorageService } from '../../services/storage-service/local-storag
 import { CategoryService } from '../../services/api-services/category-service/category.service';
 import { CarrelloService } from '../../services/api-services/carrello-service/carrello.service';
 import { ListaDesideriService } from '../../services/api-services/lista-desideri-service/lista-desideri.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 //per le categorie e la scelta dell'ordinamento
@@ -59,10 +60,10 @@ export class AllProductsFilterBackendComponent {
   ];
 
   selectedSort: number = 0;
-  selectedCategory: number = -1; //-1 --> tutte le categorie (all)
+  selectedCategory: number = -1;
 
   currentPage: number = 1;
-  pageSize: number = 20; // default
+  pageSize: number = 20;
   totalPages: number = 1;
   totalElements: number = 0;
 
@@ -71,6 +72,8 @@ export class AllProductsFilterBackendComponent {
 
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private carrelloService: CarrelloService,
     private listaDesideriService: ListaDesideriService,
     private productService: ProductService,
@@ -81,7 +84,14 @@ export class AllProductsFilterBackendComponent {
 
 
   async ngOnInit(){
-    await this.resetFilters(); //fa anche la GET dei prodotti - await: attende il completamento 
+    this.selectedSort = Number(this.route.snapshot.queryParamMap.get('sort')) || 0;
+    this.selectedCategory = Number(this.route.snapshot.queryParamMap.get('category')) || -1; //-1 --> tutte le categorie (all)
+  
+    this.currentPage = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
+    this.pageSize = Number(this.route.snapshot.queryParamMap.get('size')) || 20; // default
+    
+
+    await this.setElements(); //fa SOLO la GET dei prodotti - await: attende il completamento 
     //console.log(this.products)
     if(this.products.length != 0){
       this.setCategories(); //fa la GET delle categorie
@@ -113,6 +123,32 @@ export class AllProductsFilterBackendComponent {
       this.loadCart();
       this.loadListaDesideri();
     }
+
+
+
+    // Ricarica gli elementi ai cambi di query param nella stessa route
+    this.route.queryParams.subscribe(params => {
+      const newSort = Number(params['sort']) || 0;
+      const newCategory = Number(params['category']) || -1;
+      const newPage = Number(params['page']) || 1;
+      const newSize = Number(params['size']) || 20;
+
+      //se i parametri cambiano (frecce indietro e avanti nel browser) aggiorno i campi e ricarico i prodotti
+      if (
+        newSort !== this.selectedSort ||
+        newCategory !== this.selectedCategory ||
+        newPage !== this.currentPage ||
+        newSize !== this.pageSize
+      ) {
+        this.selectedSort = newSort;
+        this.selectedCategory = newCategory;
+        this.currentPage = newPage;
+        this.pageSize = newSize;
+      }
+
+      //se sto solo interagendo con la pagina i valori vengono settati dai metodi prima del cambio dei query param
+      this.setElements();
+    });
   }
 
 
@@ -164,13 +200,15 @@ export class AllProductsFilterBackendComponent {
 
   onFilterOrPageSizeChange() {
     this.currentPage = 1; // reset pagina quando cambio filtro
-    this.setElements();
+    this.router.navigate(['/products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
+    //this.setElements();
   }
 
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.setElements();
+      this.router.navigate(['/products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
+      //this.setElements();
     }
   }
 
@@ -183,8 +221,10 @@ export class AllProductsFilterBackendComponent {
     this.pageSize = 20;
     this.currentPage = 1;
 
+    this.router.navigate(['/products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
+    
     //restituisce la Promise
-    return this.setElements();
+    //return this.setElements();
   }
 
 
@@ -193,7 +233,9 @@ export class AllProductsFilterBackendComponent {
   resetCategory() {
     this.selectedCategory = -1; //tutte le categorie (all)
     this.currentPage = 1; // reset pagina quando cambio filtro
-    this.setElements();
+
+    this.router.navigate(['/products'], { queryParams: { page: this.currentPage, size: this.pageSize, sort: this.selectedSort, category: this.selectedCategory } });
+    //this.setElements();
   }
 
 

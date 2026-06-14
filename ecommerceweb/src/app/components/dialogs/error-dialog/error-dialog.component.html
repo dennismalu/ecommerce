@@ -1,7 +1,7 @@
-<div class="popup-container" [class.show]="showAnimation">
-  <h2 [innerHTML]="data.title"></h2>
+<div class="popup-container" [class.show]="showAnimation" [style.background-color]="'var(--colore-sfondo-card)'">
+  <h2 [innerHTML]="data.title" [style.color]="'var(--colore-testo-intestazione)'"></h2>
   <!--  <p>{{ data.message }}</p>  -->
-  <p [innerHTML]="data.message"></p> <!-- Usa [innerHTML] per interpretare il messaggio come HTML -->
+  <p [innerHTML]="data.message" [style.color]="'var(--colore-testo-paragrafo)'"></p> <!-- Usa [innerHTML] per interpretare il messaggio come HTML -->
   <button mat-button (click)="close()">Chiudi</button>
 </div>
 

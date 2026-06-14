@@ -83,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     public PageEntityResponseDTO<ProductDTO> searchProductsByNameFilteredSortered(boolean withDisabled, int page, int size, int sort, long category, String search) {
         //se la richiesta è stata fatta da un utente loggato aggiorno la sua ultima ricerca
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth!=null && auth.getPrincipal() instanceof UserDetailsEntity userDetailsEntity) { //copre auth!=null
+        if(auth != null && auth.getPrincipal() instanceof UserDetailsEntity userDetailsEntity) { //copre auth!=null
             userDetailsEntity = (UserDetailsEntity) auth.getPrincipal();
             if(userDetailsEntity!=null && userDetailsEntity.getRole().equals(UserRole.USER)){
                 userRepository.updateLastSearchById(userDetailsEntity.getId(), search);

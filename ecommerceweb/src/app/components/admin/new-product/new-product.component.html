@@ -1,9 +1,9 @@
-<div> 
+<div [style.background-color]="'var(--colore-sfondo-principale)'" [style.color]="'var(--colore-testo-generale)'"> 
     <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" nzTip="Attendi...">
-        <div class="parent"> 
-            <div class="child"> 
+        <div [style.background-color]="'var(--colore-sfondo-principale)'" class="parent"> 
+            <div class="child" [style.background-color]="'var(--colore-sfondo-card)'"> 
                 <div class="form-title"> 
-                    <h2>Aggiungi Prodotto</h2> 
+                    <h2 [style.color]="'var(--colore-testo-intestazione)'">Aggiungi Prodotto</h2> 
                 </div> 
                 
                 <form nz-form [formGroup]="newProductForm"> 
@@ -45,7 +45,7 @@
                                 <!-- Bottone per selezionare un'immagine -->
                                 <label class="custom-file-upload">
                                     Seleziona immagine
-                                    <input 
+                                    <input
                                         type="file" 
                                         nz-button
                                         nzType="primary" 

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angu
 import { LocalStorageService } from '../../services/storage-service/local-storage.service';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { HostListener } from '@angular/core';
 
@@ -17,11 +17,13 @@ export class NavbarComponent {
   isAdminLoggedIn = false;
   menuOpen = false;
 
+  theme: string = this.localStorageService.getTheme() || 'classic';
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
+    private router: Router,
     public localStorageService: LocalStorageService,
     private authService: AuthService,
-    private router: Router,
     private NZnotification: NzNotificationService
   ){
     //OBIETTIVO: la navbar non deve venire renderizzata sul server (dove non 
@@ -53,6 +55,46 @@ export class NavbarComponent {
       //console.log('Current user status:', this.currentUserStatus); //log
     });
   }
+
+
+  changeThemeAndCloseMenu(){
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Salvo il nuovo tema
+    if(this.theme === 'classic'){
+      this.theme = 'dark';
+      this.localStorageService.saveTheme(this.theme);
+    }
+    else{
+      this.theme = 'classic';
+      this.localStorageService.saveTheme(this.theme);
+    }
+
+    // Rimuovo i fogli di stile del tema precedente
+    const existingThemeLink = document.querySelector('link[href*="assets/css/theme/"]');
+    if (existingThemeLink) {
+      existingThemeLink.remove();
+    }
+
+    // Aggiungo il nuovo foglio di stile
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `assets/css/theme/${this.theme}.css`;
+    document.head.appendChild(link);
+
+    //chiudo il menu
+    this.closeMenu()
+  }
+
+  getOppositeThemeText(){
+    if(this.theme === 'classic'){
+      return 'scuro';
+    }
+    else{
+      return 'chiaro';
+    }
+  }
+
 
 
 

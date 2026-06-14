@@ -11,5 +11,6 @@ public class UserDTO {
     private UserRole role;
     private byte[] profileImg;
     private String lastSearch;
+    private Double portafoglio;
 }
 

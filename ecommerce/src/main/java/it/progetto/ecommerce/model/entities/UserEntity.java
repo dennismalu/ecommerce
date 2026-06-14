@@ -46,4 +46,6 @@ public class UserEntity {
 
     private String lastSearch;
 
+    private Double portafoglio;
+
 }

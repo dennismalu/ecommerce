@@ -9,11 +9,12 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Data
 public class OrderItemEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long quantity;
+    private Integer quantity;
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="order_id", nullable = false) //, referencedColumnName = "id")
@@ -27,5 +28,6 @@ public class OrderItemEntity {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     //se viene eliminato un utente NON vengono eliminati anche tutti i suoi ordini
     private ProductEntity product;
+
 }
 
